@@ -1008,8 +1008,9 @@
             <i data-lucide="wand-2" style="width:14px;height:14px;vertical-align:middle;"></i>
             モデルパターン一括読込:
           </label>
-          <select id="model-pattern-select" class="form-control" style="width: auto; padding: 4px 8px; font-size: 0.82rem;" onchange="if(this.value) loadSelectedModel()">
+          <select id="model-pattern-select" class="form-control" style="width: auto; padding: 4px 8px; font-size: 0.82rem;">
             <option value="">-- ガイドブック掲載モデルを選択 --</option>
+            <option value="blank">モデルパターンなし（白紙・ゼロから作成）</option>
           <optgroup label="普通科（F）">
   <option value="bunkei_kokkoritsu">普通科 国公立文系（3年計画 / 78単位）</option>
   <option value="bunkei_shiritsu">普通科 私立文系（3年計画 / 76単位）</option>
@@ -2880,7 +2881,31 @@ const STORAGE_KEY = "hakata_seisho_r9_plan_v5";
     function loadSelectedModel() {
       const select = document.getElementById("model-pattern-select");
       const key = select.value;
-      if (!key || !MODEL_PRESETS[key]) {
+      if (!key) {
+        showToast("適用するモデルパターンを選択してください", true);
+        return;
+      }
+
+      const hasExistingSubjects = ["prev", "y1", "y2", "y3", "y4"].some(
+        yr => (appState.matrix[yr] || []).length > 0
+      );
+
+      if (hasExistingSubjects) {
+        const targetLabel = key === "blank" ? "モデルパターンなし（白紙）" : (MODEL_PRESETS[key] ? MODEL_PRESETS[key].name : "");
+        if (!window.confirm(`現在マトリクスに入力されている科目がすべて消去され、「${targetLabel}」の内容で上書きされます。よろしいですか？`)) {
+          return;
+        }
+      }
+
+      if (key === "blank") {
+        appState.matrix = { prev: [], y1: [], y2: [], y3: [], y4: [] };
+        renderMatrixTable();
+        runRuleChecks();
+        persistState();
+        showToast("「モデルパターンなし（白紙）」を適用しました。ゼロから科目を追加できます。", false);
+        return;
+      }
+      if (!MODEL_PRESETS[key]) {
         showToast("適用するモデルパターンを選択してください", true);
         return;
       }
@@ -3299,11 +3324,7 @@ const STORAGE_KEY = "hakata_seisho_r9_plan_v5";
     window.addEventListener("DOMContentLoaded", async function() {
       const loaded = await loadPersistedState();
       if (!loaded) {
-        const def = MODEL_PRESETS.bunkei_kokkoritsu;
-        appState.matrix = JSON.parse(JSON.stringify(def.matrix));
-        Object.keys(def.profile).forEach(k => {
-          appState.profile[k] = def.profile[k];
-        });
+        appState.matrix = { prev: [], y1: [], y2: [], y3: [], y4: [] };
       }
 
       populateProfileForm();
