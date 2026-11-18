@@ -1,0 +1,3309 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="handbook">
+  <title>博多青松高等学校 令和9年度 受講計画シミュレータ＆セルフチェッカー</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Public+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces */
+      --background: #ffffff;
+      --surface-container-low: #f3f2f1;
+      --surface-container: #e8e7e5;
+      --surface-container-high: #dbdad9;
+
+      /* Ink */
+      --on-surface: #0b0c0c;
+      --on-surface-variant: #505a5f;
+
+      /* Rules */
+      --outline: #0b0c0c;
+      --outline-variant: #b1b4b6;
+
+      /* Accents */
+      --primary: #162e51;
+      --on-primary: #ffffff;
+      --primary-container: #d2e2f1;
+      --on-primary-container: #0c2d4a;
+      --secondary: #4c2c92;
+      --tertiary: #1a569e;
+      --error: #d4351c;
+      --on-error: #ffffff;
+
+      /* Semantic */
+      --positive: #00703c;
+      --on-positive: #ffffff;
+      --warning: #b55400;
+      --on-warning: #ffffff;
+      --focus: #ffdd00;
+
+      /* Subject Palette (High contrast) */
+      --subj-kokugo: #162e51;
+      --subj-chireki: #7a3e1d;
+      --subj-suugaku: #005a9e;
+      --subj-rika: #196338;
+      --subj-hotai: #b04a00;
+      --subj-geijutsu: #593582;
+      --subj-gaikoku: #006666;
+      --subj-katei: #735118;
+      --subj-jouhou: #4a2c7a;
+      --subj-senmon: #3d4a54;
+      --subj-sotan: #222222;
+
+      /* Fonts */
+      --font-headline: 'Public Sans', 'Noto Sans JP', sans-serif;
+      --font-body: 'Public Sans', 'Noto Sans JP', sans-serif;
+      --font-label: 'Public Sans', 'Noto Sans JP', sans-serif;
+
+      /* Shape */
+      --rounded: 0;
+      --rounded-lg: 0;
+      --rounded-full: 0;
+
+      /* Style effects */
+      --top-index-rule: 6px solid var(--primary);
+      --inset-rule: 5px solid var(--tertiary);
+      --button-ground: 0 2px 0 #091526;
+      --button-ground-secondary: 0 2px 0 #858686;
+      --focus-yellow: #ffdd00;
+      --focus-ring: 3px solid var(--focus-yellow);
+      --focus-bar: inset 0 0 0 2px var(--on-surface);
+      --focus-underline: 0 -2px var(--focus-yellow), 0 4px var(--on-surface);
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      /* Type scale */
+      --display-size: clamp(1.5rem, 1.25rem + 1vw, 2.0rem);
+      --headline-size: clamp(1.2rem, 1.05rem + 0.4vw, 1.4rem);
+      --subhead-size: clamp(1.0rem, 0.95rem + 0.2vw, 1.125rem);
+      --body-size: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
+      --label-size: 0.75rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 200ms;
+    }
+
+    /* Base Reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { overflow-x: clip; margin: 0; padding: 0; }
+    body {
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      word-break: break-word;
+    }
+    header { position: static !important; }
+
+    /* Handbook Style Header & Rules */
+    .app-header {
+      border-top: var(--top-index-rule);
+      border-bottom: 2px solid var(--outline);
+      background: var(--background);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .header-service-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-xs);
+    }
+    .school-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      background: var(--primary);
+      color: var(--on-primary);
+      font-size: var(--label-size);
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      padding: 2px 8px;
+    }
+    .autosave-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--positive);
+      background: #ebf7f0;
+      border: 1px solid var(--positive);
+      padding: 2px 8px;
+    }
+    .app-title {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 800;
+      line-height: 1.2;
+      margin: var(--space-xs) 0 4px 0;
+      color: var(--on-surface);
+    }
+    .app-subtitle {
+      font-size: var(--body-size);
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+
+    /* Top KPI Summary Ribbon */
+    .kpi-ribbon {
+      background: var(--surface-container-low);
+      border-bottom: 1px solid var(--outline-variant);
+      padding: var(--space-sm) var(--space-lg);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--space-md);
+      align-items: center;
+    }
+    .kpi-tile {
+      display: flex;
+      flex-direction: column;
+      border-left: 3px solid var(--primary);
+      padding-left: var(--space-sm);
+    }
+    .kpi-tile.positive { border-left-color: var(--positive); }
+    .kpi-tile.warning { border-left-color: var(--warning); }
+    .kpi-tile.error { border-left-color: var(--error); }
+    .kpi-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--on-surface-variant);
+      text-transform: uppercase;
+    }
+    .kpi-value-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .kpi-val {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+    }
+    .kpi-sub {
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      background: var(--surface-container-low);
+      border-bottom: 2px solid var(--outline);
+      padding: 0 var(--space-lg);
+      overflow-x: auto;
+      gap: 2px;
+    }
+    .tab-btn {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 10px 16px;
+      background: transparent;
+      border: none;
+      border-bottom: 4px solid transparent;
+      color: var(--on-surface-variant);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .tab-btn:hover {
+      background: var(--surface-container);
+      color: var(--on-surface);
+    }
+    .tab-btn.active {
+      background: var(--background);
+      color: var(--primary);
+      border-bottom: 4px solid var(--primary);
+      font-weight: 800;
+    }
+    .tab-btn:focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: -2px;
+    }
+    .tab-step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      background: var(--outline-variant);
+      color: var(--background);
+      font-size: 0.7rem;
+      font-weight: 800;
+    }
+    .tab-btn.active .tab-step-badge {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+
+    /* Container */
+    .main-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: var(--space-md) var(--space-lg);
+    }
+
+    /* Action Toolbar */
+    .toolbar-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    /* Buttons */
+    .btn {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 6px 14px;
+      border: 1px solid var(--outline);
+      background: var(--primary);
+      color: var(--on-primary);
+      box-shadow: var(--button-ground);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1.2;
+    }
+    .btn:hover { filter: brightness(1.1); }
+    .btn:active { transform: translateY(2px); box-shadow: none; }
+    .btn:focus-visible { outline: var(--focus-ring); box-shadow: var(--focus-bar); }
+
+    .btn-secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border-color: var(--outline);
+      box-shadow: var(--button-ground-secondary);
+    }
+    .btn-positive {
+      background: var(--positive);
+      color: var(--on-positive);
+      border-color: #004d2a;
+    }
+    .btn-warning {
+      background: var(--warning);
+      color: var(--on-warning);
+      border-color: #7d3a00;
+    }
+    .btn-danger {
+      background: var(--error);
+      color: var(--on-error);
+      border-color: #8a1f0e;
+    }
+    .btn-sm {
+      font-size: 0.75rem;
+      padding: 4px 8px;
+    }
+
+    /* Inset Alert Callout */
+    .callout-inset {
+      border-left: var(--inset-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-sm) var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .callout-inset.error-banner {
+      border-left: 6px solid var(--error);
+      background: #fff5f5;
+      border-top: 1px solid #f5c2c7;
+      border-right: 1px solid #f5c2c7;
+      border-bottom: 1px solid #f5c2c7;
+    }
+    .callout-title {
+      font-weight: 800;
+      font-size: 0.9rem;
+      margin: 0 0 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary);
+    }
+    .callout-inset.error-banner .callout-title {
+      color: var(--error);
+    }
+    .callout-text {
+      margin: 0;
+      font-size: 0.82rem;
+      color: var(--on-surface);
+    }
+
+    /* Matrix Table Layout */
+    .matrix-wrapper {
+      overflow-x: auto;
+      border: 2px solid var(--outline);
+      background: var(--background);
+      margin-bottom: var(--space-lg);
+    }
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      min-width: 1140px;
+    }
+    .matrix-table th, .matrix-table td {
+      border: 1px solid var(--outline-variant);
+      padding: 6px;
+      vertical-align: top;
+    }
+    .matrix-table th {
+      background: var(--surface-container-low);
+      font-weight: 800;
+      text-align: center;
+      border-bottom: 2px solid var(--outline);
+    }
+    .matrix-table thead th.th-subj {
+      color: #ffffff;
+      padding: 6px 4px;
+      font-size: 0.76rem;
+    }
+    .matrix-table thead th.th-subj.c-kokugo { background: var(--subj-kokugo); }
+    .matrix-table thead th.th-subj.c-chireki { background: var(--subj-chireki); }
+    .matrix-table thead th.th-subj.c-suugaku { background: var(--subj-suugaku); }
+    .matrix-table thead th.th-subj.c-rika { background: var(--subj-rika); }
+    .matrix-table thead th.th-subj.c-hotai { background: var(--subj-hotai); }
+    .matrix-table thead th.th-subj.c-geijutsu { background: var(--subj-geijutsu); }
+    .matrix-table thead th.th-subj.c-gaikoku { background: var(--subj-gaikoku); }
+    .matrix-table thead th.th-subj.c-katei { background: var(--subj-katei); }
+    .matrix-table thead th.th-subj.c-jouhou { background: var(--subj-jouhou); }
+    .matrix-table thead th.th-subj.c-senmon { background: var(--subj-senmon); }
+    .matrix-table thead th.th-subj.c-sotan { background: var(--subj-sotan); }
+
+    .matrix-table .row-year-label {
+      background: var(--surface-container-low);
+      font-weight: 800;
+      text-align: center;
+      width: 80px;
+      border-right: 2px solid var(--outline);
+    }
+    .matrix-table .row-summary-cell {
+      background: var(--surface-container-low);
+      text-align: right;
+      font-weight: 800;
+      font-size: 0.85rem;
+      width: 60px;
+      border-left: 2px solid var(--outline);
+    }
+    .matrix-table tr.total-row {
+      background: var(--surface-container);
+      font-weight: 800;
+      border-top: 2px solid var(--outline);
+    }
+    .matrix-table tr.total-row td {
+      text-align: center;
+      font-size: 0.8rem;
+    }
+
+    /* Subject Cell Content */
+    .subj-cell {
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .subj-cell-items {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      flex-grow: 1;
+    }
+    .btn-add-subject {
+      margin-top: 4px;
+      background: transparent;
+      border: 1px dashed var(--outline-variant);
+      color: var(--tertiary);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px;
+      width: 100%;
+      cursor: pointer;
+      text-align: center;
+    }
+    .btn-add-subject:hover {
+      background: var(--primary-container);
+      border-color: var(--primary);
+      color: var(--on-primary-container);
+    }
+
+    /* Subject Pill */
+    .subj-pill {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      padding: 2px 4px;
+      font-size: 0.72rem;
+      background: var(--background);
+      border: 1px solid var(--outline);
+      box-shadow: 1px 1px 0 rgba(0,0,0,0.15);
+      line-height: 1.2;
+    }
+    .subj-pill.is-required {
+      border-left: 3px solid var(--primary);
+    }
+    .subj-pill.has-warning {
+      border-left: 3px solid var(--warning);
+      background: #fff8f0;
+    }
+    .subj-pill.has-error {
+      border: 1.5px solid var(--error);
+      border-left: 4px solid var(--error);
+      background: #fff0f0;
+      color: #8a1f0e;
+    }
+    .pill-title {
+      font-weight: 700;
+      flex-grow: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .pill-meta {
+      font-size: 0.68rem;
+      color: var(--on-surface-variant);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .pill-error-tag {
+      background: var(--error);
+      color: #ffffff;
+      font-size: 0.6rem;
+      font-weight: 800;
+      padding: 0 3px;
+      white-space: nowrap;
+    }
+    .pill-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      padding: 0 3px;
+      font-weight: 800;
+      border: 1px solid currentColor;
+    }
+    .pill-btn-del {
+      background: transparent;
+      border: none;
+      color: var(--error);
+      font-weight: 800;
+      cursor: pointer;
+      padding: 0 2px;
+      font-size: 0.8rem;
+      line-height: 1;
+    }
+    .pill-btn-del:hover {
+      background: var(--error);
+      color: #ffffff;
+    }
+
+    /* Modal / Popups */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(11, 12, 12, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: var(--space-md);
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background: var(--background);
+      border: 2px solid var(--outline);
+      box-shadow: 0 4px 0 #0b0c0c;
+      width: 100%;
+      max-width: 880px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-header {
+      background: var(--primary);
+      color: var(--on-primary);
+      padding: var(--space-sm) var(--space-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-title {
+      font-weight: 800;
+      font-size: 1rem;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--on-primary);
+      font-size: 1.2rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .modal-body {
+      padding: var(--space-md);
+      overflow-y: auto;
+      flex-grow: 1;
+    }
+    .modal-filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+      background: var(--surface-container-low);
+      padding: var(--space-sm);
+      border: 1px solid var(--outline-variant);
+    }
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: var(--space-sm);
+    }
+    .catalog-item-card {
+      border: 1px solid var(--outline-variant);
+      padding: 8px;
+      background: var(--background);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .catalog-item-card:hover {
+      border-color: var(--primary);
+      background: #fafbfc;
+    }
+    .catalog-item-card.is-added {
+      background: var(--primary-container);
+      border-color: var(--tertiary);
+    }
+    .catalog-item-card.is-conflict {
+      background: #fff5f5;
+      border-color: var(--error);
+    }
+
+    /* Forms */
+    .form-group {
+      margin-bottom: var(--space-md);
+    }
+    .form-label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+    .form-hint {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--on-surface-variant);
+      margin-bottom: 4px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 6px 10px;
+      border: 2px solid var(--outline);
+      background: var(--background);
+      font-family: inherit;
+      font-size: 0.875rem;
+      color: var(--on-surface);
+    }
+    .form-control:focus {
+      outline: var(--focus-ring);
+      box-shadow: var(--focus-bar);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-md);
+    }
+
+    /* Checklist Panel */
+    .check-card {
+      border: 1px solid var(--outline-variant);
+      border-left: 6px solid var(--outline-variant);
+      background: var(--background);
+      padding: var(--space-sm) var(--space-md);
+      margin-bottom: var(--space-sm);
+    }
+    .check-card.pass { border-left-color: var(--positive); }
+    .check-card.warn { border-left-color: var(--warning); background: #fffdfa; }
+    .check-card.fail { border-left-color: var(--error); background: #fffafa; }
+    .check-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .check-title {
+      font-weight: 800;
+      font-size: 0.88rem;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .check-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border: 1px solid currentColor;
+      white-space: nowrap;
+    }
+    .check-badge.pass { color: var(--positive); border-color: var(--positive); background: #ebf7f0; }
+    .check-badge.warn { color: var(--warning); border-color: var(--warning); background: #fff4ea; }
+    .check-badge.fail { color: var(--error); border-color: var(--error); background: #faecea; }
+    .check-body {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: var(--on-surface-variant);
+    }
+
+    /* Print Preview View matching Excel/PDF Format */
+    .print-sheet {
+      background: #ffffff;
+      border: 2px solid #000000;
+      padding: 20px;
+      margin: var(--space-md) auto;
+      max-width: 1200px;
+      color: #000000;
+      font-family: 'Public Sans', 'Noto Sans JP', sans-serif;
+    }
+    .print-masthead {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 2px solid #000000;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    .print-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+      border: 2px solid #000000;
+      margin-bottom: 12px;
+    }
+    .print-table th, .print-table td {
+      border: 1px solid #000000;
+      padding: 4px 6px;
+    }
+    .print-table th {
+      background: #f0f0f0;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    /* Print Styles */
+    @media print {
+      body { background: #ffffff !important; color: #000000 !important; }
+      .app-header, .kpi-ribbon, .nav-tabs, .toolbar-bar, .modal-backdrop, .no-print {
+        display: none !important;
+      }
+      .main-container { padding: 0 !important; max-width: 100% !important; }
+      .tab-pane { display: none !important; }
+      #tab-print { display: block !important; }
+      .print-sheet {
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+      }
+      @page {
+        size: A4 landscape;
+        margin: 10mm;
+      }
+    }
+
+    /* Notification Banner */
+    .toast-msg {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--primary);
+      color: var(--on-primary);
+      border: 2px solid var(--outline);
+      box-shadow: 2px 2px 0 #000;
+      padding: 10px 16px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+    .toast-msg.error-toast {
+      background: var(--error);
+      color: var(--on-error);
+    }
+    .toast-msg.show { display: flex; }
+
+    @media (max-width: 768px) {
+      .app-header { padding: var(--space-sm) var(--space-md); }
+      .nav-tabs { padding: 0 var(--space-sm); }
+      .main-container { padding: var(--space-sm); }
+      .matrix-wrapper { max-height: 600px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hidden file input for loading saved JSON plan -->
+  <input type="file" id="load-plan-file-input" accept=".json,application/json" style="display: none;" onchange="handleLoadPlanFile(event)">
+
+  <!-- Top Masthead Header -->
+  <header class="app-header">
+    <div class="header-service-row">
+      <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+        <span class="school-badge">
+          <i data-lucide="graduation-cap" style="width:14px;height:14px;"></i>
+          福岡県立博多青松高等学校
+        </span>
+        <span class="autosave-badge" id="autosave-indicator">
+          <i data-lucide="cloud-check" style="width:13px;height:13px;"></i>
+          <span id="autosave-text">ブラウザ自動保存中</span>
+        </span>
+      </div>
+      <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+        <button class="btn btn-positive btn-sm" onclick="exportPlanJSON()" title="現在の受講計画をファイルに保存して後で続きから編集できます">
+          <i data-lucide="save" style="width:14px;height:14px;"></i>
+          計画を保存 (ファイル出力)
+        </button>
+        <button class="btn btn-secondary btn-sm" onclick="triggerLoadPlanFile()" title="保存した受講計画ファイルを読み込んで続きから編集します">
+          <i data-lucide="folder-open" style="width:14px;height:14px;"></i>
+          続きから読込 (ファイル選択)
+        </button>
+      </div>
+    </div>
+    <h1 class="app-title">令和9年度 受講計画シミュレータ＆セルフチェッカー</h1>
+    <p class="app-subtitle">
+      「受講ガイドブック」「教員用ガイドライン」「★Ｒ９受講計画表」完全準拠。①②の分割講座・発展応用科目ごとの選択や、計画データの保存・途中再開に対応しています。
+    </p>
+  </header>
+
+  <!-- KPI Status Ribbon -->
+  <aside class="kpi-ribbon" aria-label="受講計画サマリー">
+    <div class="kpi-tile" id="kpi-credits-tile">
+      <span class="kpi-label">総修得予定単位数</span>
+      <div class="kpi-value-row">
+        <span class="kpi-val" id="kpi-total-credits">0</span>
+        <span class="kpi-sub" id="kpi-credits-status">/ 74単位 (卒業要件)</span>
+      </div>
+    </div>
+    <div class="kpi-tile" id="kpi-required-tile">
+      <span class="kpi-label">必履修科目判定</span>
+      <div class="kpi-value-row">
+        <span class="kpi-val" id="kpi-required-val">未完了</span>
+        <span class="kpi-sub" id="kpi-required-sub">(全11教科要件)</span>
+      </div>
+    </div>
+    <div class="kpi-tile" id="kpi-annual-tile">
+      <span class="kpi-label">年間単位数チェック</span>
+      <div class="kpi-value-row">
+        <span class="kpi-val" id="kpi-annual-val">適正</span>
+        <span class="kpi-sub">上限33単位/年</span>
+      </div>
+    </div>
+    <div class="kpi-tile" id="kpi-checks-tile">
+      <span class="kpi-label">セルフチェック項目</span>
+      <div class="kpi-value-row">
+        <span class="kpi-val" id="kpi-checks-val">0 / 12</span>
+        <span class="kpi-sub">合格</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Tabs (1: 基本情報＆作成方針, 2: 受講計画マトリクス) -->
+  <nav class="nav-tabs" role="tablist">
+    <button class="tab-btn active" onclick="switchTab('profile')" id="tab-btn-profile" role="tab" aria-selected="true">
+      <span class="tab-step-badge">1</span>
+      <span>基本情報＆作成方針</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('matrix')" id="tab-btn-matrix" role="tab" aria-selected="false">
+      <span class="tab-step-badge">2</span>
+      <span>受講計画マトリクス（メイン）</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('checker')" id="tab-btn-checker" role="tab" aria-selected="false">
+      <span class="tab-step-badge">3</span>
+      <span>セルフチェック＆ルール検証 (P.17準拠)</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('print')" id="tab-btn-print" role="tab" aria-selected="false">
+      <span class="tab-step-badge">4</span>
+      <span>公式書式プレビュー＆印刷 (教員提出用)</span>
+    </button>
+  </nav>
+
+  <!-- Container -->
+  <main class="main-container">
+
+    <!-- TAB 1: PROFILE & POLICY -->
+    <section id="pane-profile" class="tab-pane">
+      
+      <div class="callout-inset">
+        <div class="callout-title">
+          <i data-lucide="user-check" style="width:16px;height:16px;"></i>
+          基本プロフィールおよび「受講計画の作成方針」
+        </div>
+        <p class="callout-text">
+          受講登録の核は「将来設計・進路希望」です。これを明確に定めた上で科目選択を行います。入力内容はブラウザに自動保存されるほか、右上の「計画を保存」からファイルとして保存できます。
+        </p>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="inp-student-name">★ 生徒氏名</label>
+          <input type="text" id="inp-student-name" class="form-control" placeholder="青松 太郎" oninput="saveUserData()">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inp-hr-number">★ HR番号 / 学籍番号</label>
+          <input type="text" id="inp-hr-number" class="form-control" placeholder="11R-01 / 26F001" oninput="saveUserData()">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="sel-department">★ 学科</label>
+          <select id="sel-department" class="form-control" onchange="handleDepartmentChange(this.value)">
+            <option value="F">普通科 (F科)</option>
+            <option value="J">情報科学科 (J科 / 専門20単位以上)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="sel-school-part">★ 所属部</label>
+          <select id="sel-school-part" class="form-control" onchange="saveUserData()">
+            <option value="Ⅰ部">Ⅰ部 (午前)</option>
+            <option value="Ⅱ部">Ⅱ部 (午後)</option>
+            <option value="Ⅲ部">Ⅲ部 (夜間)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="sel-plan-years">★ 修業年限</label>
+          <select id="sel-plan-years" class="form-control" onchange="handlePlanYearsChange(this.value)">
+            <option value="3">3年計画 (標準)</option>
+            <option value="4">4年計画 (じっくり型)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="sel-student-type">★ 入学区分</label>
+          <select id="sel-student-type" class="form-control" onchange="saveUserData()">
+            <option value="新入">新入年次 (高1相当)</option>
+            <option value="在校">在校生年次 (高2相当)</option>
+            <option value="卒年">卒業予定年次 (高3/4相当)</option>
+            <option value="転編入">転編入・再入学生</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inp-enroll-years">在籍すべき年月</label>
+          <input type="text" id="inp-enroll-years" class="form-control" placeholder="例: 3年0ヶ月 (通算36ヶ月以上)" oninput="saveUserData()">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inp-grad-year">卒業予定年月</label>
+          <input type="text" id="inp-grad-year" class="form-control" placeholder="例: 令和10年3月" oninput="saveUserData()">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="tx-future-goal">★ 将来の目標（就きたい職、働きたい業界、どのように生計を立てるか、きっかけ など）</label>
+        <span class="form-hint">受講計画作成方針の最重要項目です。具体的に記載しましょう。</span>
+        <textarea id="tx-future-goal" class="form-control" rows="3" placeholder="例: IT業界でWebエンジニアとして働きたい。博多青松でプログラミングや情報技術の基礎を固め、大学の情報工学部へ進学して先端システム開発を学ぶ。" oninput="saveUserData()"></textarea>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--outline-variant); margin: var(--space-lg) 0;">
+
+      <h2 style="font-size: 1.1rem; font-weight: 800; color: var(--primary); margin-bottom: var(--space-sm);">
+        進路希望設定（該当する項目を入力）
+      </h2>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="sel-career-type">進路系統区分</label>
+          <select id="sel-career-type" class="form-control" onchange="saveUserData()">
+            <option value="university">四年制大学・短期大学進学</option>
+            <option value="vocational">専門学校進学</option>
+            <option value="employment">就職（公務員・民間） / その他</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inp-target-school">第1志望校（学校名・学部・学科・コース）</label>
+          <input type="text" id="inp-target-school" class="form-control" placeholder="例: 九州大学 工学部 / 福岡大学 経済学部" oninput="saveUserData()">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inp-exam-type">受験方式</label>
+          <input type="text" id="inp-exam-type" class="form-control" placeholder="例: 一般選抜 (共テ併用) / 総合型選抜 / 指定校推薦" oninput="saveUserData()">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="tx-exam-subjects">受験科目（共通テスト / 個別試験）</label>
+          <input type="text" id="tx-exam-subjects" class="form-control" placeholder="共テ: 6教科8科目(情Ⅰ含) / 個別: 数学・物理・英語" oninput="saveUserData()">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="tx-choice-reason">志望校選定の理由</label>
+          <input type="text" id="tx-choice-reason" class="form-control" placeholder="学びたいカリキュラムがあるため、就職実績が良いため など" oninput="saveUserData()">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="tx-career-notes">★ 受講計画を作成する際に意識したこと・苦労したこと・悩み／時間割作成時の希望</label>
+        <textarea id="tx-career-notes" class="form-control" rows="2" placeholder="例: 2年次に数Ⅱと物理を発展グレードで両立できるか不安だが、教科担任と相談しながら頑張りたい。アルバイトの時間帯を避けて午前中心に組みたい。" oninput="saveUserData()"></textarea>
+      </div>
+
+      <div style="text-align: right; margin-top: var(--space-md);">
+        <button class="btn" onclick="switchTab('matrix')">
+          次へ：受講計画マトリクスへ進む
+          <i data-lucide="arrow-right" style="width:14px;height:14px;"></i>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- TAB 2: MATRIX (MAIN) -->
+    <section id="pane-matrix" class="tab-pane" style="display: none;">
+      
+      <div class="toolbar-bar">
+        <div class="btn-group">
+          <label for="model-pattern-select" style="font-weight: 700; font-size: 0.8rem; margin-right: 4px;">
+            <i data-lucide="wand-2" style="width:14px;height:14px;vertical-align:middle;"></i>
+            モデルパターン一括読込:
+          </label>
+          <select id="model-pattern-select" class="form-control" style="width: auto; padding: 4px 8px; font-size: 0.82rem;">
+            <option value="">-- ガイドブック掲載モデルを選択 --</option>
+          <optgroup label="普通科（F）">
+  <option value="bunkei_kokkoritsu">普通科 国公立文系（3年計画 / 78単位）</option>
+  <option value="bunkei_shiritsu">普通科 私立文系（3年計画 / 76単位）</option>
+  <option value="rikei_kokkoritsu">普通科 国公立理系（3年計画 / 79単位）</option>
+  <option value="rikei_shiritsu">普通科 私立理系（3年計画 / 76単位）</option>
+  <option value="shushoku_senmon">普通科 就職・専門学校（3年計画 / 75単位）</option>
+</optgroup>
+<optgroup label="情報科学科（J）">
+  <option value="j_kokkoritsu_rikei">情報科学科 国公立・私立理系進学（4年計画 / 88単位）</option>
+  <option value="j_shiritsu_bunkei">情報科学科 私立文系・特別推薦進学（3年計画 / 76単位）</option>
+  <option value="j_system">情報科学科 情報システム・IT就職（3年計画 / 76単位）</option>
+  <option value="j_design">情報科学科 情報デザイン・専門学校（3年計画 / 76単位）</option>
+  <option value="j_kaikei_business">情報科学科 会計・ビジネス就職（3年計画 / 76単位）</option>
+</optgroup> 
+   
+          </select>
+          <button class="btn btn-secondary btn-sm" onclick="loadSelectedModel()">
+            展開・適用
+          </button>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-positive btn-sm" onclick="exportPlanJSON()" title="現在のマトリクスと入力内容を保存用JSONファイルとしてダウンロードします">
+            <i data-lucide="save" style="width:14px;height:14px;"></i>
+            計画を保存
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="triggerLoadPlanFile()" title="保存したJSONファイルを開いて途中から編集を再開します">
+            <i data-lucide="folder-open" style="width:14px;height:14px;"></i>
+            続きから読込
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="toggleYear4()">
+            <i data-lucide="calendar" style="width:14px;height:14px;"></i>
+            <span id="btn-toggle-y4-text">4年計画行を表示</span>
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="exportCSV()">
+            <i data-lucide="download" style="width:14px;height:14px;"></i>
+            CSV出力
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="confirmResetPlan(this)">
+            <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
+            全クリア
+          </button>
+        </div>
+      </div>
+
+      <!-- Real-time Validation Error Banner -->
+      <div class="callout-inset error-banner" id="matrix-error-banner" style="display: none;">
+        <div class="callout-title">
+          <i data-lucide="alert-triangle" style="width:18px;height:18px;"></i>
+          <span id="matrix-error-title">受講計画のルール違反・重複エラーが検出されました</span>
+        </div>
+        <ul id="matrix-error-list" style="margin: 4px 0 0 20px; padding: 0; font-size: 0.82rem; color: #8a1f0e; font-weight: 700;">
+          <!-- Dynamic Error Items -->
+        </ul>
+      </div>
+
+      <!-- Inset Guideline Notice -->
+      <div class="callout-inset">
+        <div class="callout-title">
+          <i data-lucide="info" style="width:16px;height:16px;"></i>
+          受講計画作成のルールと分割科目の扱い（令和9年度改定）
+        </div>
+        <p class="callout-text">
+          ①「卒業までに74単位以上」修得する必要があります（情報科学科は専門20単位以上）。年間受講単位数は原則「33単位以内」です。<br>
+          ②「①②」に分かれている科目（数学Ⅰ①・②、英コⅠ①・②など）や「(標)」「(発)」は個別に登録できます。必ず「①→②」「(標)→(発)」の順に選択してください（同一年度に①と②を並べて配置することも可能です）。
+        </p>
+      </div>
+
+      <!-- Matrix Table -->
+      <div class="matrix-wrapper">
+        <table class="matrix-table" id="matrix-table" aria-label="卒業までの受講計画マトリクス">
+          <thead>
+            <tr>
+              <th rowspan="2" style="width: 75px;">年次</th>
+              <th class="th-subj c-kokugo">国語</th>
+              <th class="th-subj c-chireki">地歴公民</th>
+              <th class="th-subj c-suugaku">数学</th>
+              <th class="th-subj c-rika">理科</th>
+              <th class="th-subj c-hotai">保健体育</th>
+              <th class="th-subj c-geijutsu">芸術</th>
+              <th class="th-subj c-gaikoku">外国語</th>
+              <th class="th-subj c-katei">家庭</th>
+              <th class="th-subj c-jouhou">情報</th>
+              <th class="th-subj c-senmon">専門・その他</th>
+              <th class="th-subj c-sotan">総探</th>
+              <th rowspan="2" style="width: 60px;">小計</th>
+              <th rowspan="2" style="width: 60px;">累計</th>
+            </tr>
+            <tr>
+              <th style="font-size: 0.68rem; color: var(--on-surface-variant);">必現国・言文</th>
+              <th style="font-size: 0.68rem; color: var(--on-surface-variant);">必地総・歴総・公共</th>
+              <th style="font-size: 0.68rem; color: var(--on-surface-variant);">必数Ⅰ①②(4)</th>
+              <th style="font-size: 0.68rem; color: var(--on-surface-variant);">必基礎3科目等</th>
+              <th style="font-size: 0.68rem; color: var(--on-surface-variant);">必体(7-8)・保(2)</th>
+              <th style="font-size: 0.68rem; color: var(--on-surface-variant);">必芸Ⅰ(2)</th>
+              <th style="font-size: 0.68rem; color: var(--on-surface-variant);">必英コⅠ①②(4)</th>
+              <th style="font-size: 0.68rem; color: var(--on-surface-variant);">必家基/家総</th>
+              <th style="font-size: 0.68rem; color: var(--on-surface-variant);">必情Ⅰ①②(2)</th>
+              <th style="font-size: 0.68rem; color: var(--on-surface-variant);">J科20単位以上</th>
+              <th style="font-size: 0.68rem; color: var(--on-surface-variant);">必3〜6単位</th>
+            </tr>
+          </thead>
+          <tbody id="matrix-tbody">
+            <!-- Dynamic Rows Generated by JS: prev, y1, y2, y3, y4 -->
+          </tbody>
+          <tfoot>
+            <tr class="total-row">
+              <td>教科合計</td>
+              <td id="tot-kokugo">0</td>
+              <td id="tot-chireki">0</td>
+              <td id="tot-suugaku">0</td>
+              <td id="tot-rika">0</td>
+              <td id="tot-hotai">0</td>
+              <td id="tot-geijutsu">0</td>
+              <td id="tot-gaikoku">0</td>
+              <td id="tot-katei">0</td>
+              <td id="tot-jouhou">0</td>
+              <td id="tot-senmon">0</td>
+              <td id="tot-sotan">0</td>
+              <td colspan="2" id="tot-all-credits" style="font-size: 1rem; color: var(--primary);">0単位</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- TAB 3: SELF-CHECK & RULE ENGINE -->
+    <section id="pane-checker" class="tab-pane" style="display: none;">
+      
+      <div class="callout-inset">
+        <div class="callout-title">
+          <i data-lucide="clipboard-check" style="width:16px;height:16px;"></i>
+          受講計画セルフチェック表＆担任・教員点検（受講ガイドブックP.17 項目1〜14準拠）
+        </div>
+        <p class="callout-text">
+          マトリクスに入力された講座をリアルタイムに診断し、重複登録・卒業要件・年次ごとのルール・①②や標/発の履修順序・R9年度の改定点をチェックします。「要修正」または「要確認」のアラートがある場合は計画を修正するか、担任・教科担当教員に相談してください。
+        </p>
+      </div>
+
+      <div id="check-list-container">
+        <!-- Dynamic Check Cards -->
+      </div>
+
+    </section>
+
+    <!-- TAB 4: OFFICIAL PRINT PREVIEW -->
+    <section id="pane-print" class="tab-pane" style="display: none;">
+      
+      <div class="toolbar-bar no-print">
+        <span style="font-weight: 700; font-size: 0.9rem;">
+          公式「★Ｒ９受講計画表」提出用プレビュー
+        </span>
+        <div class="btn-group">
+          <button class="btn btn-positive" onclick="window.print()">
+            <i data-lucide="printer" style="width:14px;height:14px;"></i>
+            A4横で印刷 / PDF保存
+          </button>
+          <button class="btn btn-secondary" onclick="exportCSV()">
+            <i data-lucide="file-spreadsheet" style="width:14px;height:14px;"></i>
+            受講計画CSVダウンロード
+          </button>
+        </div>
+      </div>
+
+      <div class="print-sheet">
+        <div class="print-masthead">
+          <div>
+            <div style="font-size: 0.8rem; font-weight: 800; color: #555;">博多青松高等学校 令和9年度 受講計画表</div>
+            <h2 style="font-size: 1.4rem; font-weight: 800; margin: 4px 0;">卒業までの受講計画</h2>
+            <div style="font-size: 0.85rem;">
+              学科: <strong id="pr-dept">普通科</strong> 
+              所属部: <strong id="pr-part">Ⅰ部</strong> 
+              HR番号: <strong id="pr-hr">--</strong> 
+              氏名: <strong id="pr-name" style="font-size: 1.1rem; text-decoration: underline;">--</strong> 
+              修業年限: <strong id="pr-years">3</strong>年計画
+            </div>
+            <div style="font-size: 0.78rem; margin-top: 2px;">
+              在籍すべき年月: <span id="pr-enroll">3年0ヶ月</span> 
+              卒業予定年月: <span id="pr-grad">令和10年3月</span>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <div style="border: 1px solid #000; width: 65px; height: 75px; text-align: center; font-size: 0.7rem; padding: 2px;">
+              担任印
+              <div style="border-top: 1px solid #000; height: 50px; margin-top: 4px;"></div>
+            </div>
+            <div style="border: 1px solid #000; width: 65px; height: 75px; text-align: center; font-size: 0.7rem; padding: 2px;">
+              二次チェック印
+              <div style="border-top: 1px solid #000; height: 50px; margin-top: 4px;"></div>
+            </div>
+            <div style="border: 1px solid #000; width: 65px; height: 75px; text-align: center; font-size: 0.7rem; padding: 2px;">
+              教務/G印
+              <div style="border-top: 1px solid #000; height: 50px; margin-top: 4px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Career Strategy Box -->
+        <div style="border: 1px solid #000; padding: 6px 10px; margin-bottom: 10px; font-size: 0.78rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+              <strong>★将来の目標:</strong>
+              <div id="pr-future-goal" style="min-height: 28px; margin-top: 2px;">--</div>
+            </div>
+            <div>
+              <strong>進路希望・第1志望:</strong>
+              <div id="pr-target-school" style="margin-top: 2px;">--</div>
+              <strong>受験方式・受験科目:</strong>
+              <div id="pr-exam-info" style="margin-top: 2px;">--</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan Matrix Printed -->
+        <table class="print-table" id="print-matrix-table">
+          <thead>
+            <tr>
+              <th style="width: 55px;">年度</th>
+              <th>国語</th>
+              <th>地歴公民</th>
+              <th>数学</th>
+              <th>理科</th>
+              <th>保健体育</th>
+              <th>芸術</th>
+              <th>外国語</th>
+              <th>家庭</th>
+              <th>情報</th>
+              <th>その他</th>
+              <th>総探</th>
+              <th style="width: 45px;">小計</th>
+              <th style="width: 45px;">合計</th>
+            </tr>
+          </thead>
+          <tbody id="print-matrix-tbody">
+            <!-- Dynamic Print Rows -->
+          </tbody>
+          <tfoot>
+            <tr style="background: #f5f5f5; font-weight: bold; text-align: center;">
+              <td>合計単位</td>
+              <td id="pr-tot-kokugo">0</td>
+              <td id="pr-tot-chireki">0</td>
+              <td id="pr-tot-suugaku">0</td>
+              <td id="pr-tot-rika">0</td>
+              <td id="pr-tot-hotai">0</td>
+              <td id="pr-tot-geijutsu">0</td>
+              <td id="pr-tot-gaikoku">0</td>
+              <td id="pr-tot-katei">0</td>
+              <td id="pr-tot-jouhou">0</td>
+              <td id="pr-tot-senmon">0</td>
+              <td id="pr-tot-sotan">0</td>
+              <td colspan="2" id="pr-grand-total" style="font-size: 0.95rem;">0単位</td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <!-- Teacher Notes / Verification Box -->
+        <div style="border: 1px solid #000; padding: 6px 10px; font-size: 0.75rem; display: flex; justify-content: space-between; align-items: flex-start;">
+          <div style="max-width: 75%;">
+            <strong>【指導・点検事項】</strong>
+            <ul style="margin: 2px 0 0 16px; padding: 0;">
+              <li>修得単位数74単位以上（新入・平成12年以降入学者）を満たしていること（情報科学科は専門20単位以上）。</li>
+              <li>各年度の受講上限（33単位以内）および修得順序（総合→探究、①→②、標準→発展等）、重複登録がないことを確認。</li>
+              <li>実習費（家庭科・芸術科）の領収書控えを受講登録カルテに貼付すること。</li>
+            </ul>
+          </div>
+          <div style="text-align: right; min-width: 140px;">
+            点検日: 令和 年 月 日<br>
+            総合判定: <strong style="font-size: 0.9rem;" id="pr-eval-status">点検中</strong>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Subject Picker Modal -->
+  <div class="modal-backdrop" id="subject-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title-text">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title-text">
+          <i data-lucide="book-open" style="width:18px;height:18px;"></i>
+          <span>科目を選択して追加</span>
+        </h2>
+        <button class="modal-close-btn" onclick="closeSubjectModal()" aria-label="閉じる">×</button>
+      </div>
+
+      <div class="modal-filter-row">
+        <div style="flex: 1; min-width: 160px;">
+          <label class="form-label" style="font-size: 0.72rem; margin-bottom: 2px;">教科フィルタ</label>
+          <select id="modal-subj-filter" class="form-control" style="font-size: 0.78rem; padding: 3px;" onchange="renderSubjectCatalog()">
+            <option value="all">全教科</option>
+            <option value="国語">国語</option>
+            <option value="地歴公民">地歴公民</option>
+            <option value="数学">数学</option>
+            <option value="理科">理科</option>
+            <option value="保健体育">保健体育</option>
+            <option value="芸術">芸術</option>
+            <option value="外国語">外国語</option>
+            <option value="家庭">家庭</option>
+            <option value="情報">情報</option>
+            <option value="専門その他">専門その他</option>
+            <option value="総探">総探</option>
+          </select>
+        </div>
+
+        <div style="flex: 1; min-width: 130px;">
+          <label class="form-label" style="font-size: 0.72rem; margin-bottom: 2px;">区分フィルタ</label>
+          <select id="modal-req-filter" class="form-control" style="font-size: 0.78rem; padding: 3px;" onchange="renderSubjectCatalog()">
+            <option value="all">すべての講座</option>
+            <option value="required">必履修・選択必履修</option>
+            <option value="standard">標準講座</option>
+            <option value="advanced">発展・応用講座</option>
+          </select>
+        </div>
+
+        <div style="flex: 2; min-width: 180px;">
+          <label class="form-label" style="font-size: 0.72rem; margin-bottom: 2px;">講座名・キーワード検索</label>
+          <input type="text" id="modal-search-input" class="form-control" style="font-size: 0.78rem; padding: 3px;" placeholder="科目名で検索 (例: ①, 発展, 物理)..." oninput="renderSubjectCatalog()">
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div class="catalog-grid" id="modal-catalog-grid">
+          <!-- Subject cards generated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-msg" id="app-toast">
+    <i data-lucide="check-circle" id="toast-icon" style="width:16px;height:16px;"></i>
+    <span id="toast-text">通知メッセージ</span>
+  </div>
+
+  <!-- API Shim -->
+  <api-shim></api-shim>
+
+  <script>
+const STORAGE_KEY = "hakata_seisho_r9_plan_v5";
+
+    // --- SUBJECT DATABASE & CATALOG (令和9年度受講ガイドブック記載順・シラバス完全準拠) ---
+    const SUBJECT_CATALOG = [
+     // ==================== 1. 国語 ====================
+// 必履修科目
+{ id: "kokugo_genkoku_ki", groupId: "genkoku", name: "現代の国語(基)", category: "国語", credits: 2, level: "基礎", required: true, term: "前期", targetYear: ["y1", "y2", "y3", "y4"], note: "前期開講（言語文化(基)とセット）" },
+{ id: "kokugo_genkoku_hyo", groupId: "genkoku", name: "現代の国語(標)", category: "国語", credits: 2, level: "標準", required: true, term: "半期", targetYear: ["y1", "y2", "y3", "y4"], note: "半期完結（前期または後期・言語文化(標)とセット）" },
+{ id: "kokugo_genbun_ki", groupId: "genbun", name: "言語文化(基)", category: "国語", credits: 2, level: "基礎", required: true, term: "後期", targetYear: ["y1", "y2", "y3", "y4"], note: "後期開講（現代の国語(基)とセット）" },
+{ id: "kokugo_genbun_hyo", groupId: "genbun", name: "言語文化(標)", category: "国語", credits: 2, level: "標準", required: true, term: "半期", targetYear: ["y1", "y2", "y3", "y4"], note: "半期完結（前期または後期・現代の国語(標)とセット）" },
+
+// 言語文化（発展）
+{ id: "kokugo_genbun_hatsu_1", groupId: "genbun_hatsu_1", name: "言語文化①(発)", category: "国語", credits: 1, level: "発展", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講（現国・言文(基/標)済）" },
+{ id: "kokugo_genbun_hatsu_2", groupId: "genbun_hatsu_2", name: "言語文化②(発)", category: "国語", credits: 1, level: "発展", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講（言語文化①(発)済）" },
+
+// 論理国語
+{ id: "kokugo_ronri_ki_a", groupId: "ronri_ki", name: "論理国語(a)(基)", category: "国語", credits: 1, level: "基礎", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講（現国・言文済）" },
+{ id: "kokugo_ronri_ki_b", groupId: "ronri_ki", name: "論理国語(b)(基)", category: "国語", credits: 1, level: "基礎", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講（現国・言文済）" },
+{ id: "kokugo_ronri_hyo_a", groupId: "ronri_hyo", name: "論理国語(a)(標)", category: "国語", credits: 1, level: "標準", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講（現国・言文済）" },
+{ id: "kokugo_ronri_hyo_b", groupId: "ronri_hyo", name: "論理国語(b)(標)", category: "国語", credits: 1, level: "標準", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講（現国・言文済）" },
+{ id: "kokugo_ronri_hatsu", groupId: "ronri_adv", name: "論理国語(発)", category: "国語", credits: 2, level: "発展", required: false, term: "前期", targetYear: ["y3", "y4"], note: "前期開講・卒年のみ（現国・言文済）" },
+{ id: "kokugo_ronri_ou", groupId: "ronri_adv", name: "論理国語(応)", category: "国語", credits: 2, level: "応用", required: false, term: "後期", targetYear: ["y3", "y4"], note: "後期開講・卒年のみ（現国・言文済）" },
+
+// 文学国語
+{ id: "kokugo_bungaku_ki_a", groupId: "bungaku_ki", name: "文学国語(a)(基)", category: "国語", credits: 1, level: "基礎", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講（現国・言文済）" },
+{ id: "kokugo_bungaku_ki_b", groupId: "bungaku_ki", name: "文学国語(b)(基)", category: "国語", credits: 1, level: "基礎", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講（現国・言文済）" },
+{ id: "kokugo_bungaku_hyo_a", groupId: "bungaku_hyo", name: "文学国語(a)(標)", category: "国語", credits: 1, level: "標準", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講（現国・言文済／文学国語(基)と同時受講不可）" },
+{ id: "kokugo_bungaku_hyo_b", groupId: "bungaku_hyo", name: "文学国語(b)(標)", category: "国語", credits: 1, level: "標準", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講（現国・言文済／文学国語(基)と同時受講不可）" },
+
+// 古典探究
+{ id: "kokugo_koten_ki_a", groupId: "koten_ki", name: "古典探究(a)(基)", category: "国語", credits: 1, level: "基礎", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講（現国・言文済）" },
+{ id: "kokugo_koten_ki_b", groupId: "koten_ki", name: "古典探究(b)(基)", category: "国語", credits: 1, level: "基礎", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講（現国・言文済）" },
+{ id: "kokugo_koten_hyo_1", groupId: "koten_hyo", name: "古典探究①(標)", category: "国語", credits: 2, level: "標準", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講（現国・言文済）" },
+{ id: "kokugo_koten_hyo_2", groupId: "koten_hyo", name: "古典探究②(標)", category: "国語", credits: 2, level: "標準", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講（古典探究①(標)済）" },
+{ id: "kokugo_koten_hatsu", groupId: "koten_adv", name: "古典探究(発)", category: "国語", credits: 2, level: "発展", required: false, term: "前期", targetYear: ["y3", "y4"], note: "前期開講・卒年のみ（古典探究(標)①②または言語文化(発)①②済）" },
+{ id: "kokugo_koten_ou", groupId: "koten_adv", name: "古典探究(応)", category: "国語", credits: 2, level: "応用", required: false, term: "後期", targetYear: ["y3", "y4"], note: "後期開講・卒年のみ（古典探究(標)①②または言語文化(発)①②済）" },
+
+// 国語表現
+{ id: "kokugo_hyogen_ki_a", groupId: "hyogen_kiso", name: "国語表現(a)(基)", category: "国語", credits: 1, level: "基礎", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講（現国・言文済）" },
+{ id: "kokugo_hyogen_ki_b", groupId: "hyogen_kiso", name: "国語表現(b)(基)", category: "国語", credits: 1, level: "基礎", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講（現国・言文済）" },
+{ id: "kokugo_hyogen_hatsu", groupId: "hyogen_zen", name: "国語表現(発)", category: "国語", credits: 1, level: "発展", required: false, term: "前期", targetYear: ["y3", "y4"], note: "前期開講・卒年のみ（現国・言文済）" },
+{ id: "kokugo_hyogen_ou", groupId: "hyogen_go", name: "国語表現(応)", category: "国語", credits: 1, level: "応用", required: false, term: "後期", targetYear: ["y3", "y4"], note: "後期開講・卒年のみ（現国・言文済）" },
+
+// 国語演習
+{ id: "kokugo_enshu_ou_1", groupId: "kokugo_enshu_1", name: "国語演習①(応)", category: "国語", credits: 1, level: "応用", required: false, term: "前期", targetYear: ["y3", "y4"], note: "前期開講・卒年のみ（現国・言文(基/標)済）" },
+{ id: "kokugo_enshu_ou_2", groupId: "kokugo_enshu_2", name: "国語演習②(応)", category: "国語", credits: 1, level: "応用", required: false, term: "後期", targetYear: ["y3", "y4"], note: "後期開講・卒年のみ（国語演習①(応)済）" },
+
+     // 2. 地歴公民（令和9年度受講ガイドブック準拠・修正版）
+
+ // 必履修科目
+  { id: "chireki_rekishi_sogo", groupId: "rekishi_sogo", name: "歴史総合(基)", category: "地歴公民", credits: 2, level: "基礎", required: true, term: "通年/半期", targetYear: ["y1", "y2", "y3", "y4"], note: "必履修" },
+  { id: "chireki_chiri_sogo", groupId: "chiri_sogo", name: "地理総合(基)", category: "地歴公民", credits: 2, level: "基礎", required: true, term: "通年/半期", targetYear: ["y1", "y2", "y3", "y4"], note: "必履修" },
+  { id: "chireki_koukyou_ki", groupId: "koukyou", name: "公共(基)", category: "地歴公民", credits: 2, level: "基礎", required: true, term: "通年/半期", targetYear: ["y1", "y2", "y3"], note: "必履修（卒業予定生は不可）" },
+
+  // 日本史探究
+  { id: "chireki_nihonshi_hyo_a", groupId: "nihonshi", name: "日本史探究a(標)", category: "地歴公民", credits: 2, level: "標準", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "歴史総合を履修していること" },
+  { id: "chireki_nihonshi_hyo_b", groupId: "nihonshi", name: "日本史探究b(標)", category: "地歴公民", credits: 2, level: "標準", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "歴史総合を履修していること" },
+  { id: "chireki_nihonshi_hatsu_c", groupId: "nihonshi", name: "日本史探究c(発)", category: "地歴公民", credits: 2, level: "発展", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "歴史総合を履修していること（標準の履修または同時受講が望ましい）" },
+  { id: "chireki_nihonshi_hatsu_d", groupId: "nihonshi", name: "日本史探究d(発)", category: "地歴公民", credits: 2, level: "発展", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "歴史総合を履修していること（標準の履修または同時受講が望ましい）" },
+  { id: "chireki_nihonshi_ho_a", groupId: "nihonshi", name: "日本史探究a(補)", category: "地歴公民", credits: 1, level: "補充", required: false, term: "前期", targetYear: ["y3", "y4"], note: "卒業予定生対象／歴史総合を履修していること" },
+  { id: "chireki_nihonshi_ho_b", groupId: "nihonshi", name: "日本史探究b(補)", category: "地歴公民", credits: 1, level: "補充", required: false, term: "後期", targetYear: ["y3", "y4"], note: "卒業予定生対象／歴史総合を履修していること" },
+
+  // 世界史探究
+  { id: "chireki_sekai_hyo_a", groupId: "sekai", name: "世界史探究a(標)", category: "地歴公民", credits: 2, level: "標準", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "歴史総合を履修していること" },
+  { id: "chireki_sekai_hyo_b", groupId: "sekai", name: "世界史探究b(標)", category: "地歴公民", credits: 2, level: "標準", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "歴史総合を履修していること" },
+  { id: "chireki_sekai_hatsu_c", groupId: "sekai", name: "世界史探究c(発)", category: "地歴公民", credits: 2, level: "発展", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "歴史総合を履修していること（標準の履修または同時受講が望ましい）" },
+  { id: "chireki_sekai_hatsu_d", groupId: "sekai", name: "世界史探究d(発)", category: "地歴公民", credits: 2, level: "発展", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "歴史総合を履修していること（標準の履修または同時受講が望ましい）" },
+  { id: "chireki_sekai_ho_a", groupId: "sekai", name: "世界史探究a(補)", category: "地歴公民", credits: 1, level: "補充", required: false, term: "前期", targetYear: ["y3", "y4"], note: "卒業予定生対象／歴史総合を履修していること" },
+  { id: "chireki_sekai_ho_b", groupId: "sekai", name: "世界史探究b(補)", category: "地歴公民", credits: 1, level: "補充", required: false, term: "後期", targetYear: ["y3", "y4"], note: "卒業予定生対象／歴史総合を履修していること" },
+
+  // 地理探究
+  { id: "chireki_chiri_hyo_a", groupId: "chiri", name: "地理探究a(標)", category: "地歴公民", credits: 2, level: "標準", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "地理総合を履修していること" },
+  { id: "chireki_chiri_hyo_b", groupId: "chiri", name: "地理探究b(標)", category: "地歴公民", credits: 2, level: "標準", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "地理総合を履修していること" },
+  { id: "chireki_chiri_hatsu_c", groupId: "chiri", name: "地理探究c(発)", category: "地歴公民", credits: 1, level: "発展", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "地理総合を履修していること（標準の履修または同時受講が望ましい）" },
+  { id: "chireki_chiri_hatsu_d", groupId: "chiri", name: "地理探究d(発)", category: "地歴公民", credits: 1, level: "発展", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "地理総合を履修していること（標準の履修または同時受講が望ましい）" },
+  { id: "chireki_chiri_ho_a", groupId: "chiri", name: "地理探究a(補)", category: "地歴公民", credits: 1, level: "補充", required: false, term: "前期", targetYear: ["y3", "y4"], note: "卒業予定生対象／地理総合を履修していること" },
+  { id: "chireki_chiri_ho_b", groupId: "chiri", name: "地理探究b(補)", category: "地歴公民", credits: 1, level: "補充", required: false, term: "後期", targetYear: ["y3", "y4"], note: "卒業予定生対象／地理総合を履修していること" },
+
+  // 公民選択科目・学校設定科目
+  { id: "chireki_rinri_hyo", groupId: "rinri", name: "倫理(標)", category: "地歴公民", credits: 2, level: "標準", required: false, term: "通年", targetYear: ["y2", "y3", "y4"], note: "公共を履修していること" },
+  { id: "chireki_seikei_hyo", groupId: "seikei", name: "政治・経済(標)", category: "地歴公民", credits: 2, level: "標準", required: false, term: "通年", targetYear: ["y2", "y3", "y4"], note: "公共を履修していること" },
+  { id: "chireki_seikei_ho", groupId: "seikei", name: "政治・経済(補)", category: "地歴公民", credits: 1, level: "補充", required: false, term: "通年", targetYear: ["y3", "y4"], note: "卒業予定生対象／政治・経済(標)を履修していること（同時受講不可）" },
+  { id: "chireki_jiji_ki", groupId: "jiji", name: "時事問題(基)", category: "地歴公民", credits: 2, level: "基礎", required: false, term: "通年", targetYear: ["y2", "y3", "y4"], note: "公共(基)を履修していること（同時不可）" },
+     
+  // ==================== 3. 数学 ====================
+  // 数学Ⅰ（必履修）
+  { id: "suugaku_1_ki_1", groupId: "suugaku_1_1", name: "数学Ⅰ(基)①", category: "数学", credits: 2, level: "基礎", required: true, term: "前期", targetYear: ["y1", "y2", "y3"], note: "前期開講" },
+  { id: "suugaku_1_ki_2", groupId: "suugaku_1_2", name: "数学Ⅰ(基)②", category: "数学", credits: 2, level: "基礎", required: true, term: "後期", targetYear: ["y1", "y2", "y3"], note: "後期開講（数学Ⅰ(基)①済）" },
+  { id: "suugaku_1_hyo_1", groupId: "suugaku_1_1", name: "数学Ⅰ(標)①", category: "数学", credits: 2, level: "標準", required: true, term: "前期", targetYear: ["y1", "y2", "y3"], note: "前期開講" },
+  { id: "suugaku_1_hyo_2", groupId: "suugaku_1_2", name: "数学Ⅰ(標)②", category: "数学", credits: 2, level: "標準", required: true, term: "後期", targetYear: ["y1", "y2", "y3"], note: "後期開講（数学Ⅰ(標)①済）" },
+
+  // 数学Ａ
+  { id: "suugaku_a_1", groupId: "suugaku_a_1", name: "数学Ａ①", category: "数学", credits: 1, level: "標準", required: false, term: "前期", targetYear: ["y1", "y2", "y3"], note: "前期開講（数学Ⅰ(標)と同時または修得後）" },
+  { id: "suugaku_a_2", groupId: "suugaku_a_2", name: "数学Ａ②", category: "数学", credits: 1, level: "標準", required: false, term: "後期", targetYear: ["y1", "y2", "y3"], note: "後期開講（数学Ａ①済）" },
+  { id: "suugaku_a_semi", groupId: "suugaku_a_semi", name: "数学Ａ(半期完結)", category: "数学", credits: 2, level: "標準", required: false, term: "半期", targetYear: ["y1", "y2", "y3"], note: "半期完結（数学Ⅰ(標)と同時または修得後）" },
+
+  // 数学Ⅱ
+  { id: "suugaku_2_ki_1", groupId: "suugaku_2_1", name: "数学Ⅱ(基)①", category: "数学", credits: 2, level: "基礎", required: false, term: "前期", targetYear: ["y2", "y3"], note: "前期開講（数学Ⅰ(基または標)済）" },
+  { id: "suugaku_2_ki_2", groupId: "suugaku_2_2", name: "数学Ⅱ(基)②", category: "数学", credits: 2, level: "基礎", required: false, term: "後期", targetYear: ["y2", "y3"], note: "後期開講（数学Ⅱ(基)①済）" },
+  { id: "suugaku_2_hyo_1", groupId: "suugaku_2_1", name: "数学Ⅱ(標)①", category: "数学", credits: 2, level: "標準", required: false, term: "前期", targetYear: ["y2", "y3"], note: "前期開講（数学Ⅰ(標)済）" },
+  { id: "suugaku_2_hyo_2", groupId: "suugaku_2_2", name: "数学Ⅱ(標)②", category: "数学", credits: 2, level: "標準", required: false, term: "後期", targetYear: ["y2", "y3"], note: "後期開講（数学Ⅱ(標)①済）" },
+  { id: "suugaku_2_hatsu_1", groupId: "suugaku_2_1", name: "数学Ⅱ(発)①", category: "数学", credits: 2, level: "発展", required: false, term: "前期", targetYear: ["y2", "y3"], note: "前期開講（数Ⅰ(標)・数Ａ(標)済、数Ｂ(発)と同時受講必須）" },
+  { id: "suugaku_2_hatsu_2", groupId: "suugaku_2_2", name: "数学Ⅱ(発)②", category: "数学", credits: 2, level: "発展", required: false, term: "後期", targetYear: ["y2", "y3"], note: "後期開講（数学Ⅱ(発)①済、数Ｂ(発)と同時受講必須）" },
+
+  // 数学Ｂ
+  { id: "suugaku_b_1", groupId: "suugaku_b_1", name: "数学Ｂ①", category: "数学", credits: 1, level: "標準", required: false, term: "前期", targetYear: ["y2", "y3"], note: "前期開講（数Ⅰ(標)済、数Ａ(標)済または同時受講）" },
+  { id: "suugaku_b_2", groupId: "suugaku_b_2", name: "数学Ｂ②", category: "数学", credits: 1, level: "標準", required: false, term: "後期", targetYear: ["y2", "y3"], note: "後期開講（数学Ｂ①済）" },
+  { id: "suugaku_b_hatsu_1", groupId: "suugaku_b_1", name: "数学Ｂ(発)①", category: "数学", credits: 1, level: "発展", required: false, term: "前期", targetYear: ["y2", "y3"], note: "前期開講（数Ⅰ(標)済、数Ａ(標)済または同時、数Ⅱ(発)と同時受講必須）" },
+  { id: "suugaku_b_hatsu_2", groupId: "suugaku_b_2", name: "数学Ｂ(発)②", category: "数学", credits: 1, level: "発展", required: false, term: "後期", targetYear: ["y2", "y3"], note: "後期開講（数学Ｂ(発)①済、数Ⅱ(発)と同時受講必須）" },
+
+  // 数学Ｃ
+  { id: "suugaku_c_1", groupId: "suugaku_c_1", name: "数学Ｃ①(標)", category: "数学", credits: 1, level: "標準", required: false, term: "前期", targetYear: ["y3", "y4"], note: "前期開講（卒年対象・数学Ⅰ(標)済）" },
+  { id: "suugaku_c_2", groupId: "suugaku_c_2", name: "数学Ｃ②(標)", category: "数学", credits: 1, level: "標準", required: false, term: "後期", targetYear: ["y3", "y4"], note: "後期開講（卒年対象・数学Ｃ①(標)済）" },
+  { id: "suugaku_c_hatsu_1", groupId: "suugaku_c_1", name: "数学Ｃ①(発)", category: "数学", credits: 1, level: "発展", required: false, term: "前期", targetYear: ["y3", "y4"], note: "前期開講（卒年対象・数Ⅰ標・数Ａ標・数Ⅱ発・数Ｂ発済、数Ⅲ発・応と同時受講必須）" },
+  { id: "suugaku_c_hatsu_2", groupId: "suugaku_c_2", name: "数学Ｃ②(発)", category: "数学", credits: 1, level: "発展", required: false, term: "後期", targetYear: ["y3", "y4"], note: "後期開講（卒年対象・数学Ｃ①(発)済、数Ⅲ発・応と同時受講必須）" },
+
+  // 数学Ⅲ
+  { id: "suugaku_3_1", groupId: "suugaku_3_1", name: "数学Ⅲ①(発)", category: "数学", credits: 2, level: "発展", required: false, term: "前期", targetYear: ["y3", "y4"], note: "前期開講（卒年対象・数Ⅰ標・数Ａ標・数Ⅱ発・数Ｂ発済、数Ⅲ応・数Ｃ発と同時受講必須）" },
+  { id: "suugaku_3_2", groupId: "suugaku_3_2", name: "数学Ⅲ②(発)", category: "数学", credits: 2, level: "発展", required: false, term: "後期", targetYear: ["y3", "y4"], note: "後期開講（卒年対象・数学Ⅲ①(発)済、数Ⅲ応・数Ｃ発と同時受講必須）" },
+  { id: "suugaku_3_ou_1", groupId: "suugaku_3_ou_1", name: "数学Ⅲ①(応)", category: "数学", credits: 1, level: "応用", required: false, term: "前期", targetYear: ["y3", "y4"], note: "前期開講（卒年対象・数Ⅰ標・数Ａ標・数Ⅱ発・数Ｂ発済、数Ⅲ発・数Ｃ発と同時受講必須）" },
+  { id: "suugaku_3_ou_2", groupId: "suugaku_3_ou_2", name: "数学Ⅲ②(応)", category: "数学", credits: 1, level: "応用", required: false, term: "後期", targetYear: ["y3", "y4"], note: "後期開講（卒年対象・数学Ⅲ①(応)済、数Ⅲ発・数Ｃ発と同時受講必須）" },
+
+  // 数学演習（学校設定科目）
+  { id: "suugaku_enshu_1_1", groupId: "suugaku_enshu_1_1", name: "数学演習Ⅰ①", category: "数学", credits: 1, level: "応用", required: false, term: "前期", targetYear: ["y3", "y4"], note: "前期開講（卒年対象・数学Ⅰ(標)・数学Ａ(標)済）" },
+  { id: "suugaku_enshu_1_2", groupId: "suugaku_enshu_1_2", name: "数学演習Ⅰ②", category: "数学", credits: 1, level: "応用", required: false, term: "後期", targetYear: ["y3", "y4"], note: "後期開講（卒年対象・数学演習Ⅰ①済）" },
+  { id: "suugaku_enshu_2_1", groupId: "suugaku_enshu_2_1", name: "数学演習Ⅱ①", category: "数学", credits: 2, level: "応用", required: false, term: "前期", targetYear: ["y3", "y4"], note: "前期開講（卒年対象・数学Ⅱ(標または発)・数学Ｂ(標または発)済）" },
+  { id: "suugaku_enshu_2_2", groupId: "suugaku_enshu_2_2", name: "数学演習Ⅱ②", category: "数学", credits: 2, level: "応用", required: false, term: "後期", targetYear: ["y3", "y4"], note: "後期開講（卒年対象・数学演習Ⅱ①済）" },
+     
+ // ==================== 4. 理科 ====================
+      { id: "rika_butsuri_ki", groupId: "butsuri_kiso_1", name: "物理基礎(基)", category: "理科", credits: 2, level: "基礎", required: true, term: "通年" },
+      { id: "rika_butsuri_hyo", groupId: "butsuri_kiso_1", name: "物理基礎(標)", category: "理科", credits: 2, level: "標準", required: true, term: "前期", note: "前期開講（物理基礎(発)とセット受講）" },
+      { id: "rika_butsuri_kiso_hatsu", groupId: "butsuri_kiso_2", name: "物理基礎(発)", category: "理科", credits: 2, level: "発展", required: false, term: "後期", note: "後期開講（物理基礎(標)とセット受講）" },
+      { id: "rika_kagaku_ki", groupId: "kagaku_kiso_1", name: "化学基礎(基)", category: "理科", credits: 2, level: "基礎", required: true, term: "通年/半期" },
+      { id: "rika_kagaku_hyo", groupId: "kagaku_kiso_1", name: "化学基礎(標)", category: "理科", credits: 2, level: "標準", required: true, term: "前期", note: "前期開講（化学基礎(発)とセット受講）" },
+      { id: "rika_kagaku_kiso_hatsu", groupId: "kagaku_kiso_2", name: "化学基礎(発)", category: "理科", credits: 2, level: "発展", required: false, term: "後期", note: "後期開講（化学基礎(標)とセット受講）" },
+      { id: "rika_seibutsu_ki", groupId: "seibutsu_kiso_1", name: "生物基礎(基)", category: "理科", credits: 2, level: "基礎", required: true, term: "通年/半期" },
+      { id: "rika_seibutsu_hyo", groupId: "seibutsu_kiso_1", name: "生物基礎(標)", category: "理科", credits: 2, level: "標準", required: true, term: "前期", note: "前期開講（生物基礎(発)とセット受講）" },
+      { id: "rika_seibutsu_kiso_hatsu", groupId: "seibutsu_kiso_2", name: "生物基礎(発)", category: "理科", credits: 2, level: "発展", required: false, term: "後期", note: "後期開講（生物基礎(標)とセット受講）" },
+      { id: "rika_chigaku_ki", groupId: "chigaku_kiso_1", name: "地学基礎(基)", category: "理科", credits: 2, level: "基礎", required: true, term: "通年/半期" },
+      { id: "rika_chigaku_hyo", groupId: "chigaku_kiso_1", name: "地学基礎(標)", category: "理科", credits: 2, level: "標準", required: true, term: "前期", note: "前期開講（地学基礎(発)とセット受講）" },
+      { id: "rika_chigaku_kiso_hatsu", groupId: "chigaku_kiso_2", name: "地学基礎(発)", category: "理科", credits: 2, level: "発展", required: false, term: "後期", note: "後期開講（地学基礎(標)とセット受講）" },
+      { id: "rika_kagaku_ningen", groupId: "kagaku_ningen", name: "科学と人間生活", category: "理科", credits: 2, level: "基礎", required: false, term: "通年", note: "情報科学科の選択必履修科目" },
+      { id: "rika_butsuri_hatsu_1", groupId: "butsuri_1", name: "物理①(発)", category: "理科", credits: 2, level: "発展", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講（物理基礎(標・発)済）" },
+      { id: "rika_butsuri_hatsu_2", groupId: "butsuri_2", name: "物理②(発)", category: "理科", credits: 2, level: "発展", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講（物理①(発)済）" },
+      { id: "rika_butsuri_ou", groupId: "butsuri_ou", name: "物理(応)", category: "理科", credits: 2, level: "応用", required: false, term: "通年", targetYear: ["y3", "y4"], note: "通年開講・卒年対象（物理①②(発)済・教科面談要）" },
+      { id: "rika_kagaku_hatsu_1", groupId: "kagaku_1", name: "化学①(発)", category: "理科", credits: 2, level: "発展", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講（化学基礎(標・発)済）" },
+      { id: "rika_kagaku_hatsu_2", groupId: "kagaku_2", name: "化学②(発)", category: "理科", credits: 2, level: "発展", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講（化学①(発)済）" },
+      { id: "rika_kagaku_ou", groupId: "kagaku_ou", name: "化学(応)", category: "理科", credits: 2, level: "応用", required: false, term: "通年", targetYear: ["y3", "y4"], note: "通年開講・卒年対象（化学①②(発)済・教科面談要）" },
+      { id: "rika_seibutsu_hatsu_1", groupId: "seibutsu_1", name: "生物①(発)", category: "理科", credits: 2, level: "発展", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講（生物基礎(標・発)済・化学基礎履修推奨）" },
+      { id: "rika_seibutsu_hatsu_2", groupId: "seibutsu_2", name: "生物②(発)", category: "理科", credits: 2, level: "発展", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講（生物①(発)済）" },
+      { id: "rika_seibutsu_ou", groupId: "seibutsu_ou", name: "生物(応)", category: "理科", credits: 2, level: "応用", required: false, term: "通年", targetYear: ["y3", "y4"], note: "通年開講・卒年対象（生物①②(発)済・教科面談要）" },
+     
+     // ==================== 5. 保健体育 ====================
+{ id: "hotai_taiiku_1", groupId: "taiiku_1", name: "体育I(基)", category: "保健体育",  credits: 2, level: "基礎", required: false, term: "前期・後期", targetYear: ["y1", "y2"],  note: "選択必履修(A/B/Iから1単位以上必須)・原則新入生用・体育B修得済は不可" },
+{ id: "hotai_taiiku_a", groupId: "taiiku_a", name: "体育A", category: "保健体育", credits: 2, level: "基礎", required: false, term: "前期・後期", targetYear: ["y2", "y3"], note: "選択必履修(A/B/Iから1単位以上必須)・個人競技中心・新入生原則不可・面談要" },
+{ id: "hotai_taiiku_b", groupId: "taiiku_b", name: "体育B", category: "保健体育", credits: 2, level: "標準", required: false, term: "前期・後期", targetYear: ["y1", "y2", "y3"], note: "選択必履修(A/B/Iから1単位以上必須)・ダンス/卓球" },
+{ id: "hotai_taiiku_c", groupId: "taiiku_c", name: "体育C", category: "保健体育", credits: 2, level: "標準", required: false, term: "前期・後期", targetYear: ["y1", "y2", "y3"], note: "選択必履修・バレー/卓球" },
+{ id: "hotai_taiiku_d", groupId: "taiiku_d", name: "体育D", category: "保健体育", credits: 2, level: "標準", required: false, term: "前期・後期", targetYear: ["y1", "y2", "y3"], note: "選択必履修・バスケ/バドミントン" },
+{ id: "hotai_taiiku_e", groupId: "taiiku_e", name: "体育E", category: "保健体育", credits: 2, level: "標準", required: false, term: "前期・後期", targetYear: ["y1", "y2", "y3"], note: "選択必履修・ハンドボール/バドミントン" },
+{ id: "hotai_taiiku_f", groupId: "taiiku_f", name: "体育F(発)", category: "保健体育", credits: 2, level: "発展", required: false, term: "前期・後期", targetYear: ["y2", "y3"], note: "体育C修得済/評定4以上/欠席2回以内/面談要（バレー）" },
+{ id: "hotai_taiiku_g", groupId: "taiiku_g", name: "体育G(発)", category: "保健体育", credits: 2, level: "発展", required: false, term: "前期・後期", targetYear: ["y2", "y3"], note: "体育D修得済/評定4以上/欠席2回以内/面談要（バスケ）" },
+{ id: "hotai_taiiku_h", groupId: "taiiku_h", name: "体育H(発)", category: "保健体育", credits: 2, level: "発展", required: false, term: "前期・後期", targetYear: ["y2", "y3"], note: "体育DまたはE修得済/評定4以上/欠席2回以内/面談要（バド）" },
+{ id: "hotai_taiiku_j", groupId: "taiiku_j", name: "体育J(発)", category: "保健体育", credits: 2, level: "発展", required: false, term: "前期・後期", targetYear: ["y2", "y3"], note: "体育BまたはC修得済/評定4以上/欠席2回以内/面談要（卓球）" },
+{ id: "hotai_sports_2", groupId: "sports_2", name: "スポーツⅡ", category: "保健体育", credits: 2, level: "発展", required: false, term: "前期・後期", targetYear: ["y2", "y3"], note: "体育5単位以上修得済/前年度前期平均評定4以上・欠席平均2回以内/最大4単位/面談要" },
+{ id: "hotai_hoken_a", groupId: "hoken_a", name: "保健a", category: "保健体育", credits: 1, level: "標準", required: true, term: "前期・後期", targetYear: ["y1", "y2"], note: "2年目までに必履修（保健bとセット望ましい）" },
+{ id: "hotai_hoken_b", groupId: "hoken_b", name: "保健b", category: "保健体育", credits: 1, level: "標準", required: true, term: "前期・後期", targetYear: ["y1", "y2"], note: "2年目までに必履修（編入で1単位修得済の場合はこちらを受講）" },
+
+ // ==================== 6. 芸術 ====================
+{ 
+  id: "geijutsu_ongaku_1", groupId: "ongaku_1", name: "音楽Ⅰ", category: "芸術", 
+  credits: 2, level: "標準", required: false, term: "前期・後期", targetYear: ["y1", "y2", "y3"], 
+  note: "選択必履修(芸Ⅰ4科目から1科目必須)・(a)→(b)順・後期アルトリコーダー各自準備" 
+},
+{ 
+  id: "geijutsu_ongaku_2", groupId: "ongaku_2", name: "音楽Ⅱ", category: "芸術", 
+  credits: 2, level: "発展", required: false, term: "前期・後期", targetYear: ["y2", "y3"], 
+  note: "音楽Ⅰ修得(評定3以上・欠課4回以内)・①②セット・後期ギター授業(期間中ネイル等厳禁)" 
+},
+{ 
+  id: "geijutsu_ongaku_3", groupId: "ongaku_3", name: "音楽Ⅲ", category: "芸術", 
+  credits: 2, level: "応用", required: false, term: "前期・後期", targetYear: ["y2", "y3"], 
+  note: "音楽Ⅱ修得(評定3以上・欠課4回以内)・①②セット・事前教科面談要" 
+},
+{ 
+  id: "geijutsu_bijutsu_1", groupId: "bijutsu_1", name: "美術Ⅰ", category: "芸術", 
+  credits: 2, level: "標準", required: false, term: "前期・後期", targetYear: ["y1", "y2", "y3"], 
+  note: "選択必履修(芸Ⅰ4科目から1科目必須)・(a)→(b)順・実習費前後期各1,000円(本登録前納入)" 
+},
+{ 
+  id: "geijutsu_bijutsu_2", groupId: "bijutsu_2", name: "美術Ⅱ", category: "芸術", 
+  credits: 2, level: "発展", required: false, term: "前期・後期", targetYear: ["y2", "y3"], 
+  note: "美術Ⅰ修得(評定3以上・欠課4回以内)・①②セット・実習費前後期各1,000円(本登録前納入)" 
+},
+{ 
+  id: "geijutsu_bijutsu_3", groupId: "bijutsu_3", name: "美術Ⅲ", category: "芸術", 
+  credits: 2, level: "応用", required: false, term: "前期・後期", targetYear: ["y2", "y3"], 
+  note: "美術Ⅱ修得(評定3以上・欠課4回以内)・①②セット・実習費前後期各1,000円(本登録前納入)" 
+},
+{ 
+  id: "geijutsu_kougei_1", groupId: "kougei_1", name: "工芸Ⅰ", category: "芸術", 
+  credits: 2, level: "標準", required: false, term: "前期・後期", targetYear: ["y1", "y2", "y3"], 
+  note: "選択必履修(芸Ⅰ4科目から1科目必須)・(a)→(b)順・実習費前後期各1,000円(本登録前納入)" 
+},
+{ 
+  id: "geijutsu_kougei_2", groupId: "kougei_2", name: "工芸Ⅱ", category: "芸術", 
+  credits: 2, level: "発展", required: false, term: "前期・後期", targetYear: ["y2", "y3"], 
+  note: "工芸Ⅰ修得(評定3以上・欠課4回以内)・①②セット・実習費前後期各1,000円(本登録前納入)" 
+},
+{ 
+  id: "geijutsu_kougei_3", groupId: "kougei_3", name: "工芸Ⅲ", category: "芸術", 
+  credits: 2, level: "応用", required: false, term: "前期・後期", targetYear: ["y2", "y3"], 
+  note: "工芸Ⅱ修得(評定3以上・欠課4回以内)・①②セット・実習費前後期各1,000円(本登録前納入)" 
+},
+{ 
+  id: "geijutsu_shodou_1", groupId: "shodou_1", name: "書道Ⅰ", category: "芸術", 
+  credits: 2, level: "標準", required: false, term: "前期・後期", targetYear: ["y1", "y2", "y3"], 
+  note: "選択必履修(芸Ⅰ4科目から1科目必須)・(a)→(b)順・実習費前後期各1,000円(本登録前納入)" 
+},
+{ 
+  id: "geijutsu_shodou_2", groupId: "shodou_2", name: "書道Ⅱ", category: "芸術", 
+  credits: 2, level: "発展", required: false, term: "前期・後期", targetYear: ["y2", "y3"], 
+  note: "書道Ⅰ修得(評定3以上・欠課4回以内)・①②セット・実習費前後期各1,000円(本登録前納入)" 
+},
+
+// ==================== 7. 外国語 ====================
+      // --- 英語コミュニケーションⅠ（必履修） ---
+      { id: "gaikoku_eiko_1_ki_1", groupId: "eiko_1_1", name: "英コⅠ(基)①", category: "外国語", credits: 2, level: "基礎", required: true, term: "前期", targetYear: ["y1"], note: "前期開講" },
+      { id: "gaikoku_eiko_1_ki_2", groupId: "eiko_1_2", name: "英コⅠ(基)②", category: "外国語", credits: 2, level: "基礎", required: true, term: "後期", targetYear: ["y1"], note: "後期開講（英コⅠ(基)①済）" },
+      { id: "gaikoku_eiko_1_hyo_1", groupId: "eiko_1_1", name: "英コⅠ(標)①", category: "外国語", credits: 2, level: "標準", required: true, term: "前期", targetYear: ["y1"], note: "前期開講" },
+      { id: "gaikoku_eiko_1_hyo_2", groupId: "eiko_1_2", name: "英コⅠ(標)②", category: "外国語", credits: 2, level: "標準", required: true, term: "後期", targetYear: ["y1"], note: "後期開講（英コⅠ(標)①済）" },
+      { id: "gaikoku_eiko_1_hatsu_1", groupId: "eiko_1_1", name: "英コⅠ(発)①", category: "外国語", credits: 2, level: "発展", required: true, term: "前期", targetYear: ["y1"], note: "前期開講" },
+      { id: "gaikoku_eiko_1_hatsu_2", groupId: "eiko_1_2", name: "英コⅠ(発)②", category: "外国語", credits: 2, level: "発展", required: true, term: "後期", targetYear: ["y1"], note: "後期開講（英コⅠ(発)①済）" },
+
+      // --- 英語コミュニケーションⅡ ---
+      { id: "gaikoku_eiko_2_ki_a", groupId: "eiko_2_a", name: "英コⅡ(基)(a)", category: "外国語", credits: 2, level: "基礎", required: false, term: "前期", targetYear: ["y2"], note: "前期開講（英コⅠ(基)済）" },
+      { id: "gaikoku_eiko_2_ki_b", groupId: "eiko_2_b", name: "英コⅡ(基)(b)", category: "外国語", credits: 2, level: "基礎", required: false, term: "後期", targetYear: ["y2"], note: "後期開講（英コⅠ(基)済）" },
+      { id: "gaikoku_eiko_2_hyo_a", groupId: "eiko_2_a", name: "英コⅡ(標)(a)", category: "外国語", credits: 2, level: "標準", required: false, term: "前期", targetYear: ["y2"], note: "前期開講（英コⅠ(標/発)済）" },
+      { id: "gaikoku_eiko_2_hyo_b", groupId: "eiko_2_b", name: "英コⅡ(標)(b)", category: "外国語", credits: 2, level: "標準", required: false, term: "後期", targetYear: ["y2"], note: "後期開講（英コⅠ(標/発)済）" },
+      { id: "gaikoku_eiko_2_hatsu_a", groupId: "eiko_2_a", name: "英コⅡ(発)(a)", category: "外国語", credits: 2, level: "発展", required: false, term: "前期", targetYear: ["y2"], note: "前期開講（英コⅠ(標/発)済）" },
+      { id: "gaikoku_eiko_2_hatsu_b", groupId: "eiko_2_b", name: "英コⅡ(発)(b)", category: "外国語", credits: 2, level: "発展", required: false, term: "後期", targetYear: ["y2"], note: "後期開講（英コⅠ(標/発)済）" },
+      { id: "gaikoku_eiko_2_ou_a", groupId: "eiko_2_ou_a", name: "英コⅡ(応)(a)", category: "外国語", credits: 1, level: "応用", required: false, term: "前期", targetYear: ["y2", "y3"], note: "前期開講（英コⅠ(標/発)済）" },
+      { id: "gaikoku_eiko_2_ou_b", groupId: "eiko_2_ou_b", name: "英コⅡ(応)(b)", category: "外国語", credits: 1, level: "応用", required: false, term: "後期", targetYear: ["y2", "y3"], note: "後期開講（英コⅠ(標/発)済）" },
+
+      // --- 英語コミュニケーションⅢ ---
+      { id: "gaikoku_eiko_3_hatsu_a", groupId: "eiko_3_a", name: "英コⅢ(発)(a)", category: "外国語", credits: 2, level: "発展", required: false, term: "前期", targetYear: ["y3"], note: "前期開講（英コⅡ(標/発)済）" },
+      { id: "gaikoku_eiko_3_hatsu_b", groupId: "eiko_3_b", name: "英コⅢ(発)(b)", category: "外国語", credits: 2, level: "発展", required: false, term: "後期", targetYear: ["y3"], note: "後期開講（英コⅡ(標/発)済）" },
+      { id: "gaikoku_eiko_3_ou_a", groupId: "eiko_3_ou_a", name: "英コⅢ(応)(a)", category: "外国語", credits: 1, level: "応用", required: false, term: "前期", targetYear: ["y3"], note: "前期開講（英コⅡ(標/発)済）" },
+      { id: "gaikoku_eiko_3_ou_b", groupId: "eiko_3_ou_b", name: "英コⅢ(応)(b)", category: "外国語", credits: 1, level: "応用", required: false, term: "後期", targetYear: ["y3"], note: "後期開講（英コⅡ(標/発)済）" },
+
+      // --- 論理・表現Ⅰ・Ⅱ・Ⅲ ---
+      { id: "gaikoku_ronhyo_1_a", groupId: "ronhyo_1_a", name: "論理・表現Ⅰ(標)(a)", category: "外国語", credits: 1, level: "標準", required: false, term: "前期", note: "前期開講（英コⅠと同時受講推奨）" },
+      { id: "gaikoku_ronhyo_1_b", groupId: "ronhyo_1_b", name: "論理・表現Ⅰ(標)(b)", category: "外国語", credits: 1, level: "標準", required: false, term: "後期", note: "後期開講（英コⅠと同時受講推奨）" },
+      { id: "gaikoku_ronhyo_2_hatsu_a", groupId: "ronhyo_2_a", name: "論理・表現Ⅱ(発)(a)", category: "外国語", credits: 1, level: "発展", required: false, term: "前期", targetYear: ["y2", "y3"], note: "前期開講（論理・表現Ⅰ済）" },
+      { id: "gaikoku_ronhyo_2_hatsu_b", groupId: "ronhyo_2_b", name: "論理・表現Ⅱ(発)(b)", category: "外国語", credits: 1, level: "発展", required: false, term: "後期", targetYear: ["y2", "y3"], note: "後期開講（論理・表現Ⅰ済）" },
+      { id: "gaikoku_ronhyo_2_ou_a", groupId: "ronhyo_2_ou_a", name: "論理・表現Ⅱ(応)(a)", category: "外国語", credits: 1, level: "応用", required: false, term: "前期", targetYear: ["y2", "y3"], note: "前期開講（論理・表現Ⅰ済）" },
+      { id: "gaikoku_ronhyo_2_ou_b", groupId: "ronhyo_2_ou_b", name: "論理・表現Ⅱ(応)(b)", category: "外国語", credits: 1, level: "応用", required: false, term: "後期", targetYear: ["y2", "y3"], note: "後期開講（論理・表現Ⅰ済）" },
+      { id: "gaikoku_ronhyo_3_ou_a", groupId: "ronhyo_3_ou_a", name: "論理・表現Ⅲ(応)(a)", category: "外国語", credits: 1, level: "応用", required: false, term: "前期", targetYear: ["y3"], note: "前期開講（論理・表現Ⅱ済）" },
+      { id: "gaikoku_ronhyo_3_ou_b", groupId: "ronhyo_3_ou_b", name: "論理・表現Ⅲ(応)(b)", category: "外国語", credits: 1, level: "応用", required: false, term: "後期", targetYear: ["y3"], note: "後期開講（論理・表現Ⅱ済）" },
+
+      // --- スピーキング実践・ディベート・エッセイ ---
+      { id: "gaikoku_speaking_ki_a", groupId: "speaking_a", name: "スピーキング実践(基)(a)", category: "外国語", credits: 1, level: "基礎", required: false, term: "前期", note: "前期開講" },
+      { id: "gaikoku_speaking_ki_b", groupId: "speaking_b", name: "スピーキング実践(基)(b)", category: "外国語", credits: 1, level: "基礎", required: false, term: "後期", note: "後期開講" },
+      { id: "gaikoku_speaking_hyo_a", groupId: "speaking_a", name: "スピーキング実践(標)(a)", category: "外国語", credits: 1, level: "標準", required: false, term: "前期", note: "前期開講（英コⅠ済推奨）" },
+      { id: "gaikoku_speaking_hyo_b", groupId: "speaking_b", name: "スピーキング実践(標)(b)", category: "外国語", credits: 1, level: "標準", required: false, term: "後期", note: "後期開講（英コⅠ済推奨）" },
+      { id: "gaikoku_debate_hyo_a", groupId: "debate_hyo_a", name: "ディベート・ディスカッションⅠ(標)(a)", category: "外国語", credits: 1, level: "標準", required: false, term: "前期", note: "前期開講（英コⅠ(標/発)済推奨）" },
+      { id: "gaikoku_debate_hyo_b", groupId: "debate_hyo_b", name: "ディベート・ディスカッションⅠ(標)(b)", category: "外国語", credits: 1, level: "標準", required: false, term: "後期", note: "後期開講（英コⅠ(標/発)済推奨）" },
+      { id: "gaikoku_essay_hatsu_a", groupId: "essay_hatsu_a", name: "エッセイライティングⅠ(発)(a)", category: "外国語", credits: 1, level: "発展", required: false, term: "前期", targetYear: ["y2", "y3"], note: "前期開講（英コⅠ(標/発)済・英検準2級程度推奨）" },
+      { id: "gaikoku_essay_hatsu_b", groupId: "essay_hatsu_b", name: "エッセイライティングⅠ(発)(b)", category: "外国語", credits: 1, level: "発展", required: false, term: "後期", targetYear: ["y2", "y3"], note: "後期開講（英コⅠ(標/発)済・英検準2級程度推奨）" },
+
+      // --- アジア言語（中国語・ハングル） ---
+      { id: "gaikoku_chinese_ki_1", groupId: "chinese_1", name: "中国語(基)①", category: "外国語", credits: 2, level: "基礎", required: false, term: "前期", note: "前期開講/受講願提出要 (12/18〆)" },
+      { id: "gaikoku_chinese_ki_2", groupId: "chinese_2", name: "中国語(基)②", category: "外国語", credits: 2, level: "基礎", required: false, term: "後期", note: "後期開講（中国語(基)①済）" },
+      { id: "gaikoku_chinese_hatsu_a", groupId: "chinese_hatsu_a", name: "中国語(発)(a)", category: "外国語", credits: 2, level: "発展", required: false, term: "通年", targetYear: ["y2", "y3"], note: "通年開講（中国語(基)済）" },
+      { id: "gaikoku_chinese_hatsu_b", groupId: "chinese_hatsu_b", name: "中国語(発)(b)", category: "外国語", credits: 2, level: "発展", required: false, term: "通年", targetYear: ["y2", "y3"], note: "通年開講（中国語(基)済）" },
+      { id: "gaikoku_korean_ki_1", groupId: "korean_1", name: "ハングル(基)①", category: "外国語", credits: 2, level: "基礎", required: false, term: "前期", note: "前期開講/受講願提出要 (12/18〆)" },
+      { id: "gaikoku_korean_ki_2", groupId: "korean_2", name: "ハングル(基)②", category: "外国語", credits: 2, level: "基礎", required: false, term: "後期", note: "後期開講（ハングル(基)①済）" },
+      { id: "gaikoku_korean_hatsu", groupId: "korean_hatsu", name: "ハングル(発)", category: "外国語", credits: 2, level: "発展", required: false, term: "通年", targetYear: ["y2", "y3"], note: "通年開講（ハングル(基)済）" },
+
+      // --- 博多青松グローバル人材育成プログラム ---
+      { id: "gaikoku_global_debate", groupId: "debate", name: "ディベート・ディスカッションⅠ(応)", category: "外国語", credits: 2, level: "応用", required: false, term: "通年", targetYear: ["y1", "y2"], note: "通年開講/グローバル育成/卒業まで残2年以上・英検準2級以上推奨" },
+      { id: "gaikoku_global_essay", groupId: "essay", name: "エッセイライティングⅠ(応)", category: "外国語", credits: 2, level: "応用", required: false, term: "通年", targetYear: ["y2", "y3"], note: "通年開講/グローバル育成/卒業まで残1年以上・英コⅠ(標/発)済" },
+     
+     // ==================== 8. 家庭 ====================
+      // 選択必履修科目（いずれか一方のみ履修可）
+      { id: "katei_kiso", groupId: "katei_req", name: "家庭基礎", category: "家庭", credits: 2, level: "標準", required: true, term: "通年/半期完結", targetYear: ["y1", "y2"], note: "実習費1000円要/原則17歳になる年までに履修" },
+      { id: "katei_sogo_a", groupId: "katei_req", name: "家庭総合(a)", category: "家庭", credits: 2, level: "標準", required: true, term: "前期/後期", targetYear: ["y1", "y2"], note: "実習費2000円要/(a)(b)両方履修必須/原則17歳になる年までに履修" },
+      { id: "katei_sogo_b", groupId: "katei_req", name: "家庭総合(b)", category: "家庭", credits: 2, level: "標準", required: true, term: "後期/前期", targetYear: ["y1", "y2"], note: "実習費2000円要/(a)(b)両方履修必須/原則17歳になる年までに履修" },
+
+    // 選択科目（専門講座：家庭基礎または家庭総合の修得が前提）
+      { id: "katei_hoiku", groupId: "hoiku", name: "保育基礎", category: "家庭", credits: 2, level: "標準", required: false, term: "通年", targetYear: ["y2", "y3"], note: "家庭基礎/総合修得後/実習費1000円要" },
+      { id: "katei_food_std", groupId: "food", name: "フードデザイン(標準)", category: "家庭", credits: 2, level: "標準", required: false, term: "前期", targetYear: ["y2", "y3"], note: "家庭基礎/総合評定3以上/発展と同時受講望ましい/実習費4000円要/ネイル等厳禁" },
+      { id: "katei_food_adv", groupId: "food", name: "フードデザイン(発展)", category: "家庭", credits: 2, level: "発展", required: false, term: "後期", targetYear: ["y2", "y3"], note: "家庭基礎/総合評定3以上/標準と同時受講必須/実習費4000円要/ネイル等厳禁" },
+      { id: "katei_fashion_std", groupId: "fashion", name: "ファッション造形(標準)", category: "家庭", credits: 2, level: "標準", required: false, term: "前期", targetYear: ["y2", "y3"], note: "家庭基礎/総合評定3以上/発展と同時受講望ましい/実習費500円＋材料費約12000円要" },
+      { id: "katei_fashion_adv", groupId: "fashion", name: "ファッション造形(発展)", category: "家庭", credits: 2, level: "発展", required: false, term: "後期", targetYear: ["y2", "y3"], note: "家庭基礎/総合評定3以上/標準と同時受講必須/実習費1000円＋材料費約4000〜6000円要" },
+      { id: "katei_seikatsu", groupId: "seikatsu", name: "生活教養", category: "家庭", credits: 2, level: "標準", required: false, term: "通年", targetYear: ["y2", "y3"], note: "家庭基礎/総合修得後/実習費3000円要" },
+      { id: "katei_color", groupId: "color", name: "カラーオブライフ", category: "家庭", credits: 2, level: "標準", required: false, term: "通年", targetYear: ["y2", "y3"], note: "家庭基礎/総合修得後" },
+     
+// ==================== 9. 情報 ====================
+      { id: "jouhou_1_1", groupId: "jouhou_1_1", name: "情報Ⅰ①", category: "情報", credits: 1, level: "標準", required: true, term: "前期", targetYear: ["y1", "y2"], note: "普通科必履修（情報科学科は受講不可）/原則①②同時受講" },
+      { id: "jouhou_1_2", groupId: "jouhou_1_2", name: "情報Ⅰ②", category: "情報", credits: 1, level: "標準", required: true, term: "後期", targetYear: ["y1", "y2"], note: "普通科必履修（情報科学科は受講不可）/原則①②同時受講（前籍校1単位修得者は②のみ）" },
+      // ※「情報Ⅱ」は令和9年度受講ガイドブックに開設講座の記載がないため削除（またはコメントアウト）
+      // { id: "jouhou_2", groupId: "jouhou_2", name: "情報Ⅱ", category: "情報", credits: 2, level: "発展", required: false, term: "通年", targetYear: ["y2", "y3"], note: "情報Ⅰ②済" },
+      // ==================== 10. 専門科目・その他（工業・商業・学校設定） ====================
+      // --- 商業科科目 ---
+      { id: "senmon_joho_shori_1", groupId: "joho_shori_1", name: "情報処理①", category: "専門その他", credits: 2, level: "基礎", required: false, term: "前期", targetYear: ["y1"], note: "情報科学科選必/前期開講/新入生対象" },
+      { id: "senmon_joho_shori_2", groupId: "joho_shori_2", name: "情報処理②", category: "専門その他", credits: 2, level: "標準", required: false, term: "後期", targetYear: ["y1"], note: "情報科学科選必/後期開講（①済）/新入生対象" },
+      { id: "senmon_business_kiso", groupId: "business_kiso", name: "ビジネス基礎", category: "専門その他", credits: 2, level: "基礎", required: false, term: "通年", targetYear: ["y1", "y2"], note: "普通科要面談" },
+      { id: "senmon_boki_ki", groupId: "boki_1", name: "簿記(基)", category: "専門その他", credits: 2, level: "基礎", required: false, term: "前期", note: "前期開講/普通科要面談" },
+      { id: "senmon_boki_hyo", groupId: "boki_2", name: "簿記(標)", category: "専門その他", credits: 2, level: "標準", required: false, term: "後期", note: "後期開講（簿記(基)済）/普通科要面談" },
+      { id: "senmon_genka", groupId: "genka", name: "原価計算", category: "専門その他", credits: 4, level: "発展", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講（簿記済）/普通科要面談" },
+      { id: "senmon_zaimu_1", groupId: "zaimu_1", name: "財務会計Ⅰ", category: "専門その他", credits: 4, level: "発展", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講（簿記済）/普通科要面談" },
+      { id: "senmon_zaimu_2", groupId: "zaimu_2", name: "財務会計Ⅱ", category: "専門その他", credits: 2, level: "応用", required: false, term: "通年", targetYear: ["y2", "y3", "y4"], note: "財務会計Ⅰ済/普通科要面談" },
+      { id: "senmon_kanri_kaikei", groupId: "kanri_kaikei", name: "管理会計", category: "専門その他", credits: 2, level: "応用", required: false, term: "通年", targetYear: ["y2", "y3", "y4"], note: "R11閉講予定/普通科要面談" },
+      { id: "senmon_marketing", groupId: "marketing", name: "マーケティング", category: "専門その他", credits: 2, level: "標準", required: false, term: "前期", note: "前期開講/普通科要面談" },
+      { id: "senmon_biz_houki", groupId: "biz_houki", name: "ビジネス法規", category: "専門その他", credits: 2, level: "標準", required: false, term: "後期", note: "後期開講/普通科要面談" },
+      { id: "senmon_shohin", groupId: "shohin", name: "商品開発と流通", category: "専門その他", credits: 2, level: "標準", required: false, term: "通年", targetYear: ["y2", "y3", "y4"], note: "普通科要面談" },
+      { id: "senmon_network_katsuyou", groupId: "network_katsuyou", name: "ネットワーク活用", category: "専門その他", credits: 2, level: "標準", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講/普通科要面談" },
+      { id: "senmon_shori_enshu", groupId: "shori_enshu", name: "情報処理演習(学校設定科目)", category: "専門その他", credits: 2, level: "発展", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講（情報処理①②または工業情報数理①②済）/R9新規/普通科要面談" },
+      { id: "senmon_software_katsuyou", groupId: "software_katsuyou", name: "ソフトウェア活用", category: "専門その他", credits: 2, level: "発展", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講（情報処理①②または工業情報数理①②済）/普通科要面談" },
+      { id: "senmon_network_kanri", groupId: "network_kanri", name: "ネットワーク管理", category: "専門その他", credits: 2, level: "発展", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講（情報処理①②または工業情報数理①②または情報Ⅰ①②済）/普通科要面談" },
+      { id: "senmon_programming_shou", groupId: "programming_shou", name: "プログラミング", category: "専門その他", credits: 2, level: "標準", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講（商業科目）/普通科要面談" },
+      
+
+      // --- 工業科科目 ---
+      { id: "senmon_kougyou_suuri_1", groupId: "kougyou_suuri_1", name: "工業情報数理①", category: "専門その他", credits: 2, level: "基礎", required: false, term: "前期", targetYear: ["y1"], note: "情報科学科選必/前期開講/普通科要面談/情報Ⅰ評定4" },
+      { id: "senmon_kougyou_suuri_2", groupId: "kougyou_suuri_2", name: "工業情報数理②", category: "専門その他", credits: 2, level: "標準", required: false, term: "後期", targetYear: ["y1", "y2"], note: "情報科学科選必/後期開講（①済）/普通科要面談" },
+      { id: "senmon_ai_literacy", groupId: "ai_literacy", name: "AIリテラシー(仮称)", category: "専門その他", credits: 2, level: "標準", required: false, term: "通年", note: "学校設定科目/R9新規/普通科要面談/情報Ⅰ評定4" },
+      { id: "senmon_cad", groupId: "cad", name: "CAD演習", category: "専門その他", credits: 2, level: "標準", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "学校設定科目/前期開講/情報Ⅰ済/普通科要面談/情報Ⅰ評定4" },
+      { id: "senmon_design", groupId: "design", name: "デザイン実践", category: "専門その他", credits: 2, level: "標準", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講/普通科要面談/情報Ⅰ評定4" },
+      { id: "senmon_cs_a", groupId: "cs_a", name: "コンピュータシステム技術(a)", category: "専門その他", credits: 2, level: "標準", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講/普通科要面談/情報Ⅰ評定4" },
+      { id: "senmon_cs_b", groupId: "cs_b", name: "コンピュータシステム技術(b)", category: "専門その他", credits: 2, level: "標準", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講/普通科要面談/情報Ⅰ評定4" },
+      { id: "senmon_programming_1", groupId: "programming_1", name: "プログラミング技術①", category: "専門その他", credits: 2, level: "発展", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講（工業情報数理②済・評定4要）" },
+      { id: "senmon_programming_2", groupId: "programming_2", name: "プログラミング技術②", category: "専門その他", credits: 2, level: "発展", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講（プログラミング技術①済）" },
+      { id: "senmon_hardware_hatsu", groupId: "hardware_1", name: "ハードウェア技術(発)", category: "専門その他", credits: 2, level: "発展", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講/普通科要面談/情報Ⅰ評定4" },
+      { id: "senmon_hardware_ou", groupId: "hardware_2", name: "ハードウェア技術(応)", category: "専門その他", credits: 2, level: "応用", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講/普通科要面談/情報Ⅰ評定4" },
+      { id: "senmon_software_hatsu", groupId: "software_1", name: "ソフトウェア技術(発)", category: "専門その他", credits: 2, level: "発展", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講/普通科要面談/情報Ⅰ評定4" },
+      { id: "senmon_software_ou", groupId: "software_2", name: "ソフトウェア技術(応)", category: "専門その他", credits: 2, level: "応用", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講/普通科要面談/情報Ⅰ評定4" },
+      { id: "senmon_multimedia_1", groupId: "multimedia_1", name: "実習(マルチメディア)①", category: "専門その他", credits: 2, level: "標準", required: false, term: "前期", targetYear: ["y2", "y3", "y4"], note: "前期開講/R9新規/普通科要面談/情報Ⅰ評定4" },
+      { id: "senmon_multimedia_2", groupId: "multimedia_2", name: "実習(マルチメディア)②", category: "専門その他", credits: 2, level: "標準", required: false, term: "後期", targetYear: ["y2", "y3", "y4"], note: "後期開講（①済）/R9新規" },
+      { id: "senmon_hisho", groupId: "hisho", name: "秘書実務", category: "専門その他", credits: 2, level: "標準", required: false, term: "通年", note: "学校設定科目/普通科要面談" },
+      
+      // --- 商業科・工業科共通 ／ その他 ---
+      { id: "senmon_kadai_kenkyu", groupId: "kadai_kenkyu", name: "課題研究(工業/商業)", category: "専門その他", credits: 2, level: "標準", required: false, term: "通年", targetYear: ["y3", "y4"], note: "情報科学科必修得/卒年対象" },
+      { id: "senmon_advanced", groupId: "advanced", name: "アドバンスド・スタディ", category: "専門その他", credits: 2, level: "発展", required: false, term: "通年", note: "高大連携/事前相談要" },
+
+      // ==================== 11. 総合的な探究の時間 ====================
+      { id: "sotan_1", groupId: "sotan_1", name: "総探(1年次/新入)", category: "総探", credits: 1, level: "標準", required: true, term: "通年", targetYear: ["y1"] },
+      { id: "sotan_2", groupId: "sotan_2", name: "総探(2年次/在校)", category: "総探", credits: 1, level: "標準", required: true, term: "通年", targetYear: ["y2"] },
+      { id: "sotan_3", groupId: "sotan_3", name: "総探(3年次/卒年)", category: "総探", credits: 1, level: "標準", required: true, term: "通年", targetYear: ["y3"] },
+      { id: "sotan_4", groupId: "sotan_4", name: "総探(4年次)", category: "総探", credits: 1, level: "標準", required: false, term: "通年", targetYear: ["y4"] },
+      { id: "sotan_koza_zen", groupId: "sotan_koza_zen", name: "講座総探(前)", category: "総探", credits: 1, level: "標準", required: false, term: "前期", note: "前期開講/卒年不足時用" },
+      { id: "sotan_koza_go", groupId: "sotan_koza_go", name: "講座総探(後)", category: "総探", credits: 1, level: "標準", required: false, term: "後期", note: "後期開講/卒年不足時用" }
+    ];
+
+    // --- APPLICATION STATE ---
+    let appState = {
+      profile: {
+        studentName: "",
+        hrNumber: "",
+        department: "F", // F: 普通科, J: 情報科学科
+        schoolPart: "Ⅰ部",
+        planYears: "3", // 3 or 4
+        studentType: "新入",
+        enrollYears: "3年0ヶ月",
+        gradYear: "令和10年3月",
+        futureGoal: "",
+        careerType: "university",
+        targetSchool: "",
+        examType: "一般選抜 (共通テスト併用)",
+        examSubjects: "共テ: 6教科8科目 / 個別: 数学・英語",
+        choiceReason: "",
+        careerNotes: ""
+      },
+      matrix: {
+        prev: [],
+        y1: [],
+        y2: [],
+        y3: [],
+        y4: []
+      },
+      showYear4: false
+    };
+
+    let activeModalCell = {
+      yearKey: "y1",
+      category: "国語"
+    };
+
+    const CATEGORIES = [
+      "国語", "地歴公民", "数学", "理科", "保健体育", 
+      "芸術", "外国語", "家庭", "情報", "専門その他", "総探"
+    ];
+
+    const YEAR_LABELS = {
+      prev: "前籍校等",
+      y1: "1年目",
+      y2: "2年目",
+      y3: "3年目",
+      y4: "4年目"
+    };
+
+    // --- MODEL PRESETS (分割科目IDに対応) ---
+    const MODEL_PRESETS = {
+      bunkei_kokkoritsu: {
+        name: "普通科 国公立文系（3年計画 / 78単位）",
+        profile: {
+          department: "F",
+          planYears: "3",
+          futureGoal: "地方自治体の行政職員（公務員）として地域創生に貢献したい。国公立大学の法文学部へ進学し、公共政策と法学を学ぶ。",
+          careerType: "university",
+          targetSchool: "九州大学 法学部 / 福岡女子大学 国際文理学部",
+          examType: "一般選抜（共通テスト6教科8科目＋個別2次記述）",
+          examSubjects: "共テ: 国・数ⅠAⅡBC・英・歴総日探・地総・公共政経・情Ⅰ / 個別: 国語・英語"
+        },
+        matrix: {
+          prev: [],
+          y1: ["kokugo_genkoku_hyo", "kokugo_genbun_hyo", "chireki_chiri_sogo", "chireki_koukyou_hyo", "suugaku_1_hyo_1", "suugaku_1_hyo_2", "suugaku_a_1", "suugaku_a_2", "rika_butsuri_ki", "rika_kagaku_ki", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "geijutsu_ongaku_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hyo_2", "katei_kiso", "jouhou_1_1", "jouhou_1_2", "sotan_1"],
+          y2: ["kokugo_ronri_hyo", "kokugo_koten_hyo", "chireki_rekishi_sogo", "chireki_nihonshi_hyo", "suugaku_2_hyo_1", "suugaku_2_hyo_2", "rika_seibutsu_ki", "hotai_taiiku_b", "geijutsu_ongaku_2", "gaikoku_eiko_2_hyo_1", "gaikoku_eiko_2_hyo_2", "gaikoku_ronhyo_1", "sotan_2"],
+          y3: ["kokugo_bungaku_hyo", "chireki_chiri_a", "chireki_chiri_b", "chireki_seikei_hyo", "chireki_rinri_hyo", "suugaku_b_1", "suugaku_b_2", "suugaku_c_1", "suugaku_c_2", "rika_chigaku_ki", "hotai_taiiku_c", "gaikoku_eiko_3_hatsu", "gaikoku_ronhyo_2_hatsu", "sotan_3"],
+          y4: []
+        }
+      },
+      bunkei_shiritsu: {
+        name: "普通科 私立文系（3年計画 / 76単位）",
+        profile: {
+          department: "F",
+          planYears: "3",
+          futureGoal: "広告出版業界でプランナー・編集者として活躍したい。私立大学の文学部・社会学部へ進学し、現代メディアと文化論を研究する。",
+          careerType: "university",
+          targetSchool: "西南学院大学 文学部 / 立命館大学 産業社会学部",
+          examType: "一般選抜（3教科型: 英語・国語・日本史）",
+          examSubjects: "個別: 英語コミュニケーション・論理国語・日本史探究"
+        },
+        matrix: {
+          prev: [],
+          y1: ["kokugo_genkoku_hyo", "kokugo_genbun_hyo", "chireki_chiri_sogo", "chireki_rekishi_sogo", "chireki_koukyou_hyo", "suugaku_1_ki_1", "suugaku_1_ki_2", "rika_seibutsu_ki", "rika_kagaku_ki", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hyo_2", "katei_kiso", "jouhou_1_1", "jouhou_1_2", "sotan_1"],
+          y2: ["kokugo_ronri_hyo", "kokugo_bungaku_hyo", "kokugo_koten_hyo", "chireki_nihonshi_a", "chireki_nihonshi_b", "rika_chigaku_ki", "hotai_taiiku_b", "geijutsu_bijutsu_1", "gaikoku_eiko_2_hyo_1", "gaikoku_eiko_2_hyo_2", "gaikoku_ronhyo_1", "gaikoku_speaking_hyo", "sotan_2"],
+          y3: ["kokugo_hyogen_hatsu", "kokugo_hyogen_ou", "chireki_nihonshi_hyo", "chireki_seikei_hyo", "hotai_taiiku_c", "geijutsu_bijutsu_2", "gaikoku_eiko_3_hatsu", "gaikoku_ronhyo_2_hatsu", "katei_food", "sotan_3"],
+          y4: []
+        }
+      },
+      rikei_kokkoritsu: {
+        name: "普通科 国公立理系（3年計画 / 79単位）",
+        profile: {
+          department: "F",
+          planYears: "3",
+          futureGoal: "半導体・新エネルギー分野の技術研究開発者になりたい。国公立大学工学部へ進学し、電子情報工学を専攻する。",
+          careerType: "university",
+          targetSchool: "九州工業大学 工学部 / 九州大学 工学部",
+          examType: "一般選抜（共テ5教科7科目＋個別2次: 数学Ⅲ・物理・化学・英語）",
+          examSubjects: "共テ: 国・数・英・物理・化学・地理総合・情Ⅰ / 個別: 数学Ⅲ・物理・化学"
+        },
+        matrix: {
+          prev: [],
+          y1: ["kokugo_genkoku_hyo", "kokugo_genbun_hyo", "chireki_rekishi_sogo", "chireki_koukyou_hyo", "suugaku_1_hyo_1", "suugaku_1_hyo_2", "suugaku_a_1", "suugaku_a_2", "rika_butsuri_hyo", "rika_butsuri_kiso_hatsu", "rika_kagaku_hyo", "rika_kagaku_kiso_hatsu", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hyo_2", "jouhou_1_1", "jouhou_1_2", "sotan_1"],
+          y2: ["kokugo_ronri_hyo", "chireki_chiri_sogo", "suugaku_2_hyo_1", "suugaku_2_hyo_2", "suugaku_b_1", "suugaku_b_2", "suugaku_c_1", "suugaku_c_2", "rika_butsuri_hatsu_1", "rika_butsuri_hatsu_2", "rika_kagaku_hatsu_1", "rika_kagaku_hatsu_2", "hotai_taiiku_b", "geijutsu_bijutsu_1", "gaikoku_eiko_2_hyo_1", "gaikoku_eiko_2_hyo_2", "katei_kiso", "sotan_2"],
+          y3: ["chireki_chiri_a", "chireki_chiri_b", "suugaku_3_1", "suugaku_3_2", "rika_butsuri_ou", "rika_kagaku_ou", "hotai_taiiku_c", "gaikoku_eiko_3_hatsu", "gaikoku_ronhyo_1", "gaikoku_ronhyo_2_hatsu", "senmon_programming", "sotan_3"],
+          y4: []
+        }
+      },
+      rikei_shiritsu: {
+        name: "普通科 私立理系（3年計画 / 76単位）",
+        profile: {
+          department: "F",
+          planYears: "3",
+          futureGoal: "バイオテクノロジー・製薬分野の技術職を目指す。私立大学薬学部・理工学部へ進学する。",
+          careerType: "university",
+          targetSchool: "福岡大学 理学部 / 近畿大学 産業理工学部",
+          examType: "一般選抜（数学・理科1科目・英語）",
+          examSubjects: "個別: 数学ⅠAⅡBC・化学・英語"
+        },
+        matrix: {
+          prev: [],
+          y1: ["kokugo_genkoku_hyo", "kokugo_genbun_hyo", "chireki_rekishi_sogo", "chireki_koukyou_hyo", "suugaku_1_hyo_1", "suugaku_1_hyo_2", "suugaku_a_1", "suugaku_a_2", "rika_kagaku_hyo", "rika_kagaku_kiso_hatsu", "rika_seibutsu_ki", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hyo_2", "katei_kiso", "jouhou_1_1", "jouhou_1_2", "sotan_1"],
+          y2: ["kokugo_ronri_hyo", "chireki_chiri_sogo", "suugaku_2_hyo_1", "suugaku_2_hyo_2", "suugaku_b_1", "suugaku_b_2", "rika_kagaku_hatsu_1", "rika_kagaku_hatsu_2", "rika_seibutsu_hyo", "rika_seibutsu_kiso_hatsu", "hotai_taiiku_b", "geijutsu_ongaku_1", "gaikoku_eiko_2_hyo_1", "gaikoku_eiko_2_hyo_2", "gaikoku_ronhyo_1", "sotan_2"],
+          y3: ["suugaku_c_1", "suugaku_c_2", "rika_kagaku_ou", "rika_seibutsu_hatsu_1", "rika_seibutsu_hatsu_2", "hotai_taiiku_c", "gaikoku_eiko_3_hatsu", "gaikoku_ronhyo_2_hatsu", "jouhou_2", "katei_food", "senmon_ai_literacy", "sotan_3"],
+          y4: []
+        }
+      },
+      shushoku_senmon: {
+        name: "普通科 就職・専門学校（3年計画 / 75単位）",
+        profile: {
+          department: "F",
+          planYears: "3",
+          futureGoal: "調理・製菓の専門学校へ進学し、将来カフェやレストランを開業して地域に愛されるお店を作りたい。",
+          careerType: "vocational",
+          targetSchool: "福岡調理師専門学校 / 中村調理製菓専門学校",
+          examType: "総合型選抜（面接・志望理由書）",
+          examSubjects: "面接、小論文"
+        },
+        matrix: {
+          prev: [],
+          y1: ["kokugo_genkoku_ki", "kokugo_genbun_ki", "chireki_koukyou_ki", "suugaku_1_ki_1", "suugaku_1_ki_2", "rika_butsuri_ki", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_ki_1", "gaikoku_eiko_1_ki_2", "katei_sogo", "jouhou_1_1", "jouhou_1_2", "sotan_1"],
+          y2: ["kokugo_ronri_ki", "kokugo_hyogen_ki", "chireki_chiri_sogo", "chireki_rekishi_sogo", "suugaku_2_ki_1", "suugaku_2_ki_2", "rika_kagaku_ki", "hotai_taiiku_b", "geijutsu_kougei_1", "gaikoku_eiko_2_ki_1", "gaikoku_eiko_2_ki_2", "katei_seikatsu", "sotan_2"],
+          y3: ["kokugo_hyogen_hatsu", "rika_seibutsu_ki", "rika_chigaku_ki", "hotai_taiiku_c", "geijutsu_kougei_2", "gaikoku_speaking_ki", "katei_food", "senmon_business_kiso", "senmon_boki", "senmon_shori_enshu", "sotan_3", "sotan_koza_zen", "sotan_koza_go"],
+          y4: []
+        }
+      },
+      // 1. 情報科学科 理系大学進学（4年計画・3年目まで66単位で73単位制限クリア）
+      j_kokkoritsu_rikei: {
+        name: "情報科学科 国公立・私立理系進学（4年計画 / 88単位）",
+        profile: {
+          department: "J",
+          planYears: "4",
+          futureGoal: "情報工学・AI分野を深く学び、システム開発やデータサイエンスに携わるエンジニアになりたい。専門学科特別推薦や一般選抜で理工系大学へ進学する。",
+          careerType: "university",
+          targetSchool: "九州工業大学 情報工学部 / 福岡工業大学 情報工学部",
+          examType: "専門学科特別推薦・一般選抜（数学・英語・情報）",
+          examSubjects: "共テ/個別: 数学ⅠAⅡBC・英語・情報 / 推薦: 調査書・小論文・面接"
+        },
+        matrix: {
+          prev: [],
+          // 1年次: 24単位（必履修中心＋工業情報数理①②）
+          y1: ["kokugo_genkoku_hyo", "kokugo_genbun_hyo", "chireki_koukyou_hyo", "suugaku_1_hyo_1", "suugaku_1_hyo_2", "suugaku_a_1", "suugaku_a_2", "rika_butsuri_hyo", "rika_butsuri_kiso_hatsu", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hyo_2", "senmon_kougyou_suuri_1", "senmon_kougyou_suuri_2", "sotan_1"],
+          // 2年次: 22単位（累計46単位）
+          y2: ["chireki_chiri_sogo", "suugaku_2_hyo_1", "suugaku_2_hyo_2", "suugaku_b_1", "suugaku_b_2", "rika_kagaku_hyo", "rika_kagaku_kiso_hatsu", "hotai_taiiku_b", "gaikoku_eiko_2_hyo_1", "gaikoku_eiko_2_hyo_2", "senmon_cs_a", "senmon_cs_b", "sotan_2"],
+          // 3年次: 20単位（累計66単位 ※4年計画の「3年目まで73単位以内」を遵守）
+          y3: ["kokugo_ronri_hyo", "chireki_rekishi_sogo", "suugaku_c_1", "suugaku_c_2", "hotai_taiiku_c", "geijutsu_bijutsu_1", "gaikoku_ronhyo_1", "katei_kiso", "senmon_programming_1", "senmon_programming_2", "senmon_ai_literacy", "sotan_3"],
+          // 4年次（卒年）: 22単位（合計88単位 / 専門26単位＋課題研究必修得）
+          y4: ["hotai_taiiku_d", "gaikoku_eiko_3_hatsu", "gaikoku_ronhyo_2_hatsu", "senmon_hardware_hatsu", "senmon_hardware_ou", "senmon_software_hatsu", "senmon_software_ou", "senmon_kadai_kenkyu", "sotan_4"]
+        }
+      },
+
+      // 2. 情報科学科 私立文系・特別推薦（3年計画 / 経済・経営・情報系学部向け）
+      j_shiritsu_bunkei: {
+        name: "情報科学科 私立文系・特別推薦進学（3年計画 / 76単位）",
+        profile: {
+          department: "J",
+          planYears: "3",
+          futureGoal: "経営学とデータ分析を掛け合わせ、企業のDX推進を担う企画職に就きたい。商業系検定の上位級を取得し、専門学科特別推薦で大学進学を目指す。",
+          careerType: "university",
+          targetSchool: "福岡大学 商学部 / 九州産業大学 商学部・経済学部",
+          examType: "専門学科特別推薦選抜（全商・県商業校長会推薦）",
+          examSubjects: "書類審査（評定・検定資格）・小論文・面接"
+        },
+        matrix: {
+          prev: [],
+          // 1年次: 26単位
+          y1: ["kokugo_genkoku_hyo", "kokugo_genbun_hyo", "chireki_koukyou_hyo", "suugaku_1_hyo_1", "suugaku_1_hyo_2", "rika_kagaku_ningen", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hyo_2", "katei_kiso", "senmon_jouhou_shori_1", "senmon_jouhou_shori_2", "sotan_1"],
+          // 2年次: 26単位（累計52単位）
+          y2: ["kokugo_ronri_hyo", "chireki_chiri_sogo", "chireki_rekishi_sogo", "suugaku_a_1", "suugaku_a_2", "rika_seibutsu_ki", "hotai_taiiku_b", "geijutsu_shodo_1", "gaikoku_eiko_2_hyo_1", "gaikoku_eiko_2_hyo_2", "gaikoku_ronhyo_1", "senmon_business_kiso", "senmon_boki_ki", "senmon_boki_hyo", "sotan_2"],
+          // 3年次: 24単位（合計76単位 / 専門26単位・課題研究含む）
+          y3: ["kokugo_hyogen_hatsu", "kokugo_hyogen_ou", "chireki_seikei_hyo", "hotai_taiiku_c", "gaikoku_ronhyo_2_hatsu", "senmon_marketing", "senmon_business_houki", "senmon_software_katsuyo", "senmon_network_katsuyo", "senmon_ai_literacy", "senmon_kadai_kenkyu", "sotan_3"]
+        }
+      },
+
+      // 3. 情報科学科 情報システム・IT就職（3年計画 / 工業情報系）
+      j_system: {
+        name: "情報科学科 情報システム・IT就職（3年計画 / 76単位）",
+        profile: {
+          department: "J",
+          planYears: "3",
+          futureGoal: "ITパスポート・基本情報技術者試験の取得を目指し、システム開発やネットワーク保守を行う県内IT企業へ就職したい。",
+          careerType: "employment",
+          targetSchool: "福岡県内IT・情報通信関連企業（システムエンジニア・保守運用職）",
+          examType: "高校斡旋就職試験（SPI・一般常識・適性・面接）",
+          examSubjects: "SPI・一般常識・個人面接"
+        },
+        matrix: {
+          prev: [],
+          // 1年次: 26単位
+          y1: ["kokugo_genkoku_ki", "kokugo_genbun_ki", "chireki_koukyou_ki", "suugaku_1_ki_1", "suugaku_1_ki_2", "rika_kagaku_ningen", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_ki_1", "gaikoku_eiko_1_ki_2", "katei_kiso", "senmon_kougyou_suuri_1", "senmon_kougyou_suuri_2", "senmon_business_kiso", "sotan_1"],
+          // 2年次: 26単位（累計52単位）
+          y2: ["kokugo_ronri_ki", "chireki_chiri_sogo", "chireki_rekishi_sogo", "suugaku_2_ki_1", "suugaku_2_ki_2", "rika_butsuri_ki", "hotai_taiiku_b", "geijutsu_kougei_1", "gaikoku_eiko_2_ki_1", "gaikoku_eiko_2_ki_2", "senmon_cs_a", "senmon_cs_b", "senmon_ai_literacy", "sotan_2"],
+          // 3年次: 24単位（合計76単位 / 専門28単位・課題研究含む）
+          y3: ["kokugo_hyogen_hatsu", "hotai_taiiku_c", "senmon_programming_1", "senmon_programming_2", "senmon_hardware_hatsu", "senmon_hardware_ou", "senmon_software_hatsu", "senmon_software_ou", "senmon_network_katsuyo", "senmon_kadai_kenkyu", "sotan_3"]
+        }
+      },
+
+      // 4. 情報科学科 情報デザイン・専門学校（3年計画 / Web・CG・メディア系）
+      j_design: {
+        name: "情報科学科 情報デザイン・専門学校（3年計画 / 76単位）",
+        profile: {
+          department: "J",
+          planYears: "3",
+          futureGoal: "WebデザインやCG・映像制作の技術を専門的に学び、将来はUI/UXデザイナーやデジタルクリエイターとして活躍したい。",
+          careerType: "vocational",
+          targetSchool: "麻生情報ビジネス専門学校 / 福岡デザイン＆テクノロジー専門学校",
+          examType: "総合型選抜（AO入試・作品プレゼン・面接）",
+          examSubjects: "面接、志望理由書（資格取得による特待生制度活用）"
+        },
+        matrix: {
+          prev: [],
+          // 1年次: 26単位
+          y1: ["kokugo_genkoku_ki", "kokugo_genbun_ki", "chireki_koukyou_ki", "suugaku_1_ki_1", "suugaku_1_ki_2", "rika_kagaku_ningen", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_ki_1", "gaikoku_eiko_1_ki_2", "geijutsu_bijutsu_1", "senmon_kougyou_suuri_1", "senmon_kougyou_suuri_2", "senmon_ai_literacy", "sotan_1"],
+          // 2年次: 26単位（累計52単位）
+          y2: ["kokugo_hyogen_ki", "chireki_chiri_sogo", "chireki_rekishi_sogo", "rika_seibutsu_ki", "hotai_taiiku_b", "geijutsu_bijutsu_2_1", "geijutsu_bijutsu_2_2", "gaikoku_eiko_2_ki_1", "gaikoku_eiko_2_ki_2", "katei_kiso", "senmon_cad", "senmon_design", "senmon_cs_a", "senmon_cs_b", "sotan_2"],
+          // 3年次: 24単位（合計76単位 / 専門26単位・課題研究含む）
+          y3: ["kokugo_hyogen_hatsu", "hotai_taiiku_c", "katei_color", "senmon_multimedia_1", "senmon_multimedia_2", "senmon_software_katsuyo", "senmon_shogyo_prog", "senmon_marketing", "senmon_kadai_kenkyu", "sotan_3"]
+        }
+      },
+
+      // 5. 情報科学科 会計・ビジネス就職（3年計画 / 商業事務・販売系）
+      j_kaikei_business: {
+        name: "情報科学科 会計・ビジネス就職（3年計画 / 76単位）",
+        profile: {
+          department: "J",
+          planYears: "3",
+          futureGoal: "全商簿記検定1級や情報処理検定の取得を目指し、企業の経理・総務事務や流通・販売業界で即戦力として働きたい。",
+          careerType: "employment",
+          targetSchool: "一般企業（経理・一般事務職）・金融機関・流通小売企業",
+          examType: "高校斡旋就職試験（一般常識・適性・面接）",
+          examSubjects: "一般常識、SPI、作文、個人面接"
+        },
+        matrix: {
+          prev: [],
+          // 1年次: 26単位
+          y1: ["kokugo_genkoku_ki", "kokugo_genbun_ki", "chireki_koukyou_ki", "suugaku_1_ki_1", "suugaku_1_ki_2", "rika_kagaku_ningen", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_ki_1", "gaikoku_eiko_1_ki_2", "katei_kiso", "senmon_jouhou_shori_1", "senmon_jouhou_shori_2", "senmon_business_kiso", "sotan_1"],
+          // 2年次: 26単位（累計52単位）
+          y2: ["kokugo_ronri_ki", "chireki_chiri_sogo", "chireki_rekishi_sogo", "rika_seibutsu_ki", "hotai_taiiku_b", "geijutsu_shodo_1", "gaikoku_eiko_2_ki_1", "gaikoku_eiko_2_ki_2", "katei_seikatsu", "senmon_boki_ki", "senmon_boki_hyo", "senmon_marketing", "senmon_business_houki", "sotan_2"],
+          // 3年次: 24単位（合計76単位 / 専門28単位・課題研究含む）
+          y3: ["kokugo_hyogen_hatsu", "hotai_taiiku_c", "senmon_zaimu_1", "senmon_genka", "senmon_hisho", "senmon_software_katsuyo", "senmon_kadai_kenkyu", "sotan_3"]
+        }
+      },
+
+    };
+
+    // --- SUBJECT-LEVEL REAL-TIME VALIDATION ENGINE ---
+    function getSubjectValidationIssues() {
+      const issuesByCellItem = {}; // key: `${yearKey}_${subjectId}`, value: array of error messages
+      const globalErrors = [];
+      const order = ["prev", "y1", "y2", "y3", "y4"];
+
+      function addIssue(yKey, subjId, msg) {
+        const k = `${yKey}_${subjId}`;
+        if (!issuesByCellItem[k]) issuesByCellItem[k] = [];
+        if (!issuesByCellItem[k].includes(msg)) issuesByCellItem[k].push(msg);
+        if (!globalErrors.includes(msg)) globalErrors.push(msg);
+      }
+
+      // 1. 重複チェック（同じ科目IDまたは同じgroupIdが複数回登録されているか）
+      const seenGroups = {}; // groupId -> [{yKey, subj}]
+      order.forEach(yKey => {
+        (appState.matrix[yKey] || []).forEach(id => {
+          const s = getSubjectById(id);
+          if (!s) return;
+          const g = s.groupId || s.id;
+          if (!seenGroups[g]) seenGroups[g] = [];
+          seenGroups[g].push({ yKey, subj: s });
+        });
+      });
+
+      Object.keys(seenGroups).forEach(g => {
+        const entries = seenGroups[g];
+        if (entries.length > 1) {
+          const yrNames = entries.map(e => YEAR_LABELS[e.yKey]).join("・");
+          const msg = `【重複エラー】「${entries[0].subj.name}」系統が複数回（${yrNames}）登録されています。同一講座は1回のみ修得可能です。`;
+          entries.forEach(e => addIssue(e.yKey, e.subj.id, msg));
+        }
+      });
+
+      // 2. 受講順序・グレード・条件不適合チェック
+      const yIdxMap = {}; // id -> yearIndex
+      order.forEach((yKey, idx) => {
+        (appState.matrix[yKey] || []).forEach(id => {
+          yIdxMap[id] = idx;
+        });
+      });
+
+      // ①→②の順序チェック（②が①より前の年度にあってはいけない。同じ年度か後の年度ならOK）
+      const seq12Pairs = [
+        { p1: ["suugaku_1_ki_1", "suugaku_1_hyo_1"], p2: ["suugaku_1_ki_2", "suugaku_1_hyo_2"], label: "数学Ⅰ" },
+        { p1: ["suugaku_a_1"], p2: ["suugaku_a_2"], label: "数学Ａ" },
+        { p1: ["suugaku_2_ki_1", "suugaku_2_hyo_1"], p2: ["suugaku_2_ki_2", "suugaku_2_hyo_2"], label: "数学Ⅱ" },
+        { p1: ["suugaku_b_1"], p2: ["suugaku_b_2"], label: "数学Ｂ" },
+        { p1: ["suugaku_c_1"], p2: ["suugaku_c_2"], label: "数学Ｃ" },
+        { p1: ["suugaku_3_1"], p2: ["suugaku_3_2"], label: "数学Ⅲ" },
+        { p1: ["rika_butsuri_hyo"], p2: ["rika_butsuri_kiso_hatsu"], label: "物理基礎(標→発)" },
+        { p1: ["rika_kagaku_hyo"], p2: ["rika_kagaku_kiso_hatsu"], label: "化学基礎(標→発)" },
+        { p1: ["rika_seibutsu_hyo"], p2: ["rika_seibutsu_kiso_hatsu"], label: "生物基礎(標→発)" },
+        { p1: ["rika_chigaku_hyo"], p2: ["rika_chigaku_kiso_hatsu"], label: "地学基礎(標→発)" },
+        { p1: ["rika_butsuri_hatsu_1"], p2: ["rika_butsuri_hatsu_2"], label: "物理(発)" },
+        { p1: ["rika_kagaku_hatsu_1"], p2: ["rika_kagaku_hatsu_2"], label: "化学(発)" },
+        { p1: ["rika_seibutsu_hatsu_1"], p2: ["rika_seibutsu_hatsu_2"], label: "生物(発)" },
+        { p1: ["rika_chigaku_hatsu_1"], p2: ["rika_chigaku_hatsu_2"], label: "地学(発)" },
+        { p1: ["gaikoku_eiko_1_ki_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hatsu_1"], p2: ["gaikoku_eiko_1_ki_2", "gaikoku_eiko_1_hyo_2", "gaikoku_eiko_1_hatsu_2"], label: "英コⅠ" },
+        { p1: ["gaikoku_eiko_2_ki_1", "gaikoku_eiko_2_hyo_1", "gaikoku_eiko_2_hatsu_1"], p2: ["gaikoku_eiko_2_ki_2", "gaikoku_eiko_2_hyo_2", "gaikoku_eiko_2_hatsu_2"], label: "英コⅡ" },
+        { p1: ["jouhou_1_1"], p2: ["jouhou_1_2"], label: "情報Ⅰ" },
+        { p1: ["senmon_kougyou_suuri_1"], p2: ["senmon_kougyou_suuri_2"], label: "工業情報数理" },
+        { p1: ["senmon_multimedia_1"], p2: ["senmon_multimedia_2"], label: "実習(マルチメディア)" }
+      ];
+
+      seq12Pairs.forEach(pair => {
+        const idx1 = Math.min(...pair.p1.map(id => yIdxMap[id] ?? 99));
+        pair.p2.forEach(id2 => {
+          if (yIdxMap[id2] !== undefined) {
+            const idx2 = yIdxMap[id2];
+            if (idx1 === 99 || idx2 < idx1) {
+              const s2 = getSubjectById(id2);
+              addIssue(order[idx2], id2, `【順序違反】「${s2.name}」は前半講座（①または標）と同時または後の年度に配置してください。`);
+            }
+          }
+        });
+      });
+
+      // 数学Ⅰ(基) -> 数学Ⅱ(標)/B/C/Ⅲ 不可
+      if (yIdxMap["suugaku_1_ki_1"] !== undefined || yIdxMap["suugaku_1_ki_2"] !== undefined) {
+        ["suugaku_2_hyo_1", "suugaku_2_hyo_2", "suugaku_b_1", "suugaku_b_2", "suugaku_c_1", "suugaku_c_2", "suugaku_3_1", "suugaku_3_2"].forEach(advId => {
+          if (yIdxMap[advId] !== undefined) {
+            const s = getSubjectById(advId);
+            addIssue(order[yIdxMap[advId]], advId, `【条件違反】「数学Ⅰ(基)」選択者は「${s.name}」を受講できません（「数学Ⅰ(標)」が必要）。`);
+          }
+        });
+      }
+
+      // 数学Ⅱの前に数学Ⅰが必要、数学Ⅲの前に数学Ⅱが必要
+      const s1DoneIdx = Math.max(
+        yIdxMap["suugaku_1_ki_2"] ?? -1,
+        yIdxMap["suugaku_1_hyo_2"] ?? -1
+      );
+      ["suugaku_2_ki_1", "suugaku_2_ki_2", "suugaku_2_hyo_1", "suugaku_2_hyo_2"].forEach(s2 => {
+        if (yIdxMap[s2] !== undefined) {
+          if (s1DoneIdx === -1 || yIdxMap[s2] <= s1DoneIdx) {
+            const s = getSubjectById(s2);
+            addIssue(order[yIdxMap[s2]], s2, `【順序違反】「${s.name}」は「数学Ⅰ②」を修得した後の年度に配置してください。`);
+          }
+        }
+      });
+
+      const s2HyoDoneIdx = yIdxMap["suugaku_2_hyo_2"] ?? -1;
+      ["suugaku_3_1", "suugaku_3_2"].forEach(s3 => {
+        if (yIdxMap[s3] !== undefined) {
+          if (s2HyoDoneIdx === -1 || yIdxMap[s3] <= s2HyoDoneIdx) {
+            const s = getSubjectById(s3);
+            addIssue(order[yIdxMap[s3]], s3, `【順序違反】「${s.name}」は「数学Ⅱ(標)②」を修得した後の年度に配置してください。`);
+          }
+        }
+      });
+
+      // 英語コミュニケーション 順序（Ⅰ② -> Ⅱ① -> Ⅲ）
+      const e1DoneIdx = Math.max(
+        yIdxMap["gaikoku_eiko_1_ki_2"] ?? -1,
+        yIdxMap["gaikoku_eiko_1_hyo_2"] ?? -1,
+        yIdxMap["gaikoku_eiko_1_hatsu_2"] ?? -1
+      );
+      ["gaikoku_eiko_2_ki_1", "gaikoku_eiko_2_ki_2", "gaikoku_eiko_2_hyo_1", "gaikoku_eiko_2_hyo_2", "gaikoku_eiko_2_hatsu_1", "gaikoku_eiko_2_hatsu_2"].forEach(e2 => {
+        if (yIdxMap[e2] !== undefined) {
+          if (e1DoneIdx === -1 || yIdxMap[e2] <= e1DoneIdx) {
+            const s = getSubjectById(e2);
+            addIssue(order[yIdxMap[e2]], e2, `【順序違反】「${s.name}」は「英コⅠ②」を修得した後の年度に配置してください。`);
+          }
+        }
+      });
+
+      const e2DoneIdx = Math.max(
+        yIdxMap["gaikoku_eiko_2_ki_2"] ?? -1,
+        yIdxMap["gaikoku_eiko_2_hyo_2"] ?? -1,
+        yIdxMap["gaikoku_eiko_2_hatsu_2"] ?? -1
+      );
+      ["gaikoku_eiko_3_hatsu", "gaikoku_eiko_3_ou"].forEach(e3 => {
+        if (yIdxMap[e3] !== undefined) {
+          if (e2DoneIdx === -1 || yIdxMap[e3] <= e2DoneIdx) {
+            const s = getSubjectById(e3);
+            addIssue(order[yIdxMap[e3]], e3, `【順序違反】「${s.name}」は「英コⅡ②」を修得した後の年度に配置してください。`);
+          }
+        }
+      });
+
+      // 理科（基礎 -> 発展）
+      const rikaPrereqs = [
+        { adv: ["rika_butsuri_hatsu_1", "rika_butsuri_hatsu_2"], base: ["rika_butsuri_ki", "rika_butsuri_hyo"], label: "物理基礎" },
+        { adv: ["rika_kagaku_hatsu_1", "rika_kagaku_hatsu_2"], base: ["rika_kagaku_ki", "rika_kagaku_hyo"], label: "化学基礎" },
+        { adv: ["rika_seibutsu_hatsu_1", "rika_seibutsu_hatsu_2"], base: ["rika_seibutsu_ki", "rika_seibutsu_hyo"], label: "生物基礎" },
+        { adv: ["rika_chigaku_hatsu_1", "rika_chigaku_hatsu_2"], base: ["rika_chigaku_ki", "rika_chigaku_hyo"], label: "地学基礎" }
+      ];
+      rikaPrereqs.forEach(rp => {
+        const baseIdx = Math.min(...rp.base.map(b => yIdxMap[b] ?? 99));
+        rp.adv.forEach(advId => {
+          if (yIdxMap[advId] !== undefined) {
+            if (baseIdx === 99 || yIdxMap[advId] <= baseIdx) {
+              const s = getSubjectById(advId);
+              addIssue(order[yIdxMap[advId]], advId, `【順序違反】「${s.name}」は「${rp.label}」修得後の年度に配置してください。`);
+            }
+          }
+        });
+      });
+
+      // 地歴公民（総合 -> 探究）
+      const chiriSogoIdx = yIdxMap["chireki_chiri_sogo"] ?? 99;
+      ["chireki_chiri_a", "chireki_chiri_b", "chireki_chiri_hyo"].forEach(cid => {
+        if (yIdxMap[cid] !== undefined && (chiriSogoIdx === 99 || yIdxMap[cid] <= chiriSogoIdx)) {
+          addIssue(order[yIdxMap[cid]], cid, "【順序違反】「地理探究」は「地理総合」修得後の年度に配置してください。");
+        }
+      });
+
+      const rekiSogoIdx = yIdxMap["chireki_rekishi_sogo"] ?? 99;
+      ["chireki_nihonshi_a", "chireki_nihonshi_b", "chireki_nihonshi_hyo", "chireki_sekai_a", "chireki_sekai_b", "chireki_sekai_hyo"].forEach(hid => {
+        if (yIdxMap[hid] !== undefined && (rekiSogoIdx === 99 || yIdxMap[hid] <= rekiSogoIdx)) {
+          const s = getSubjectById(hid);
+          addIssue(order[yIdxMap[hid]], hid, `【順序違反】「${s.name}」は「歴史総合」修得後の年度に配置してください。`);
+        }
+      });
+
+      // 地歴公民 a/b ペア必須チェック
+      const pairs = [
+        { a: "chireki_nihonshi_a", b: "chireki_nihonshi_b", name: "日本史探究a/b" },
+        { a: "chireki_sekai_a", b: "chireki_sekai_b", name: "世界史探究a/b" },
+        { a: "chireki_chiri_a", b: "chireki_chiri_b", name: "地理探究a/b" }
+      ];
+      pairs.forEach(p => {
+        const idxA = yIdxMap[p.a];
+        const idxB = yIdxMap[p.b];
+        if (idxA !== undefined && idxB === undefined) {
+          addIssue(order[idxA], p.a, `【条件違反】「${p.name}」は前期a・後期bを同一年度にセットで受講する必要があります。`);
+        } else if (idxB !== undefined && idxA === undefined) {
+          addIssue(order[idxB], p.b, `【条件違反】「${p.name}」は前期a・後期bを同一年度にセットで受講する必要があります。`);
+        } else if (idxA !== undefined && idxB !== undefined && idxA !== idxB) {
+          addIssue(order[idxA], p.a, `【条件違反】「${p.name}」は同一年度にセットで受講する必要があります。`);
+          addIssue(order[idxB], p.b, `【条件違反】「${p.name}」は同一年度にセットで受講する必要があります。`);
+        }
+      });
+
+      // 時事問題(基)と公共の同時不可
+      if (yIdxMap["chireki_jiji_ki"] !== undefined) {
+        const kIdx = Math.min(yIdxMap["chireki_koukyou_ki"] ?? 99, yIdxMap["chireki_koukyou_hyo"] ?? 99);
+        if (yIdxMap["chireki_jiji_ki"] === kIdx) {
+          addIssue(order[kIdx], "chireki_jiji_ki", "【条件違反】「時事問題(基)」と「公共」は同一年度に同時受講できません。");
+        }
+      }
+
+      // 国語（現国・言文のグレード一致）
+      const gkKi = yIdxMap["kokugo_genkoku_ki"];
+      const gkHyo = yIdxMap["kokugo_genkoku_hyo"];
+      const gbKi = yIdxMap["kokugo_genbun_ki"];
+      const gbHyo = yIdxMap["kokugo_genbun_hyo"];
+      if (gkKi !== undefined && gbHyo !== undefined) {
+        addIssue(order[gkKi], "kokugo_genkoku_ki", "【条件違反】「現代の国語」と「言語文化」は同じグレード（基礎同士・標準同士）を選択してください。");
+        addIssue(order[gbHyo], "kokugo_genbun_hyo", "【条件違反】「現代の国語」と「言語文化」は同じグレード（基礎同士・標準同士）を選択してください。");
+      }
+      if (gkHyo !== undefined && gbKi !== undefined) {
+        addIssue(order[gkHyo], "kokugo_genkoku_hyo", "【条件違反】「現代の国語」と「言語文化」は同じグレード（基礎同士・標準同士）を選択してください。");
+        addIssue(order[gbKi], "kokugo_genbun_ki", "【条件違反】「現代の国語」と「言語文化」は同じグレード（基礎同士・標準同士）を選択してください。");
+      }
+
+      // 芸術 Ⅰ -> Ⅱ -> Ⅲ 順序
+      const artChains = [
+        ["geijutsu_ongaku_1", "geijutsu_ongaku_2", "geijutsu_ongaku_3", "音楽"],
+        ["geijutsu_bijutsu_1", "geijutsu_bijutsu_2", "geijutsu_bijutsu_3", "美術"],
+        ["geijutsu_kougei_1", "geijutsu_kougei_2", null, "工芸"],
+        ["geijutsu_shodou_1", "geijutsu_shodou_2", "geijutsu_shodou_3", "書道"]
+      ];
+      artChains.forEach(([a1, a2, a3, label]) => {
+        if (a2 && yIdxMap[a2] !== undefined) {
+          if (yIdxMap[a1] === undefined || yIdxMap[a2] <= yIdxMap[a1]) {
+            addIssue(order[yIdxMap[a2]], a2, `【順序違反】「${label}Ⅱ」は「${label}Ⅰ」を修得した後の年度に配置してください。`);
+          }
+        }
+        if (a3 && yIdxMap[a3] !== undefined) {
+          if (yIdxMap[a2] === undefined || yIdxMap[a3] <= yIdxMap[a2]) {
+            addIssue(order[yIdxMap[a3]], a3, `【順序違反】「${label}Ⅲ」は「${label}Ⅱ」を修得した後の年度に配置してください。`);
+          }
+        }
+      });
+
+      // 家庭（発展科目は家庭基礎/総合の後）
+      ["katei_food", "katei_fashion"].forEach(kf => {
+        if (yIdxMap[kf] !== undefined) {
+          const baseK = Math.min(yIdxMap["katei_kiso"] ?? 99, yIdxMap["katei_sogo"] ?? 99);
+          if (baseK === 99 || yIdxMap[kf] <= baseK) {
+            const s = getSubjectById(kf);
+            addIssue(order[yIdxMap[kf]], kf, `【順序違反】「${s.name}」は「家庭基礎」または「家庭総合」修得後の年度に配置してください。`);
+          }
+        }
+      });
+
+      // 情報Ⅱは情報Ⅰ②の後
+      if (yIdxMap["jouhou_2"] !== undefined) {
+        const j1Done = yIdxMap["jouhou_1_2"] ?? -1;
+        if (j1Done === -1 || yIdxMap["jouhou_2"] <= j1Done) {
+          addIssue(order[yIdxMap["jouhou_2"]], "jouhou_2", "【順序違反】「情報Ⅱ」は「情報Ⅰ②」修得後の年度に配置してください。");
+        }
+      }
+
+      // プログラミング技術は工業情報数理②の後
+      if (yIdxMap["senmon_programming"] !== undefined) {
+        const ksDone = yIdxMap["senmon_kougyou_suuri_2"] ?? -1;
+        if (ksDone === -1 || yIdxMap["senmon_programming"] <= ksDone) {
+          addIssue(order[yIdxMap["senmon_programming"]], "senmon_programming", "【順序違反】「プログラミング技術」は「工業情報数理②」修得後の年度に配置してください。");
+        }
+      }
+
+      // 2年目までに履修すべき必履修科目（公共・保健・家庭・情報Ⅰ①②）が3年目以降にある場合
+      ["chireki_koukyou_ki", "chireki_koukyou_hyo", "hotai_hoken_a", "hotai_hoken_b", "katei_kiso", "katei_sogo", "jouhou_1_1", "jouhou_1_2"].forEach(earlyId => {
+        if (yIdxMap[earlyId] !== undefined && yIdxMap[earlyId] >= 3) { // y3 or y4
+          const s = getSubjectById(earlyId);
+          addIssue(order[yIdxMap[earlyId]], earlyId, `【年次ルール違反】「${s.name}」は必ず2年目までに配置してください。`);
+        }
+      });
+
+      return { issuesByCellItem, globalErrors };
+    }
+
+    // --- TAB SWITCHING ---
+    function switchTab(tabId) {
+      const tabs = ["profile", "matrix", "checker", "print"];
+      tabs.forEach(t => {
+        const pane = document.getElementById(`pane-${t}`);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (pane) pane.style.display = (t === tabId) ? "block" : "none";
+        if (btn) {
+          btn.classList.toggle("active", t === tabId);
+          btn.setAttribute("aria-selected", t === tabId ? "true" : "false");
+        }
+      });
+      if (tabId === "print") {
+        updatePrintPreview();
+      }
+      if (tabId === "checker") {
+        runRuleChecks();
+      }
+    }
+
+    // --- RENDER MATRIX TABLE ---
+    function renderMatrixTable() {
+      const tbody = document.getElementById("matrix-tbody");
+      if (!tbody) return;
+
+      const validation = getSubjectValidationIssues();
+
+      // Update Matrix Error Banner
+      const errBanner = document.getElementById("matrix-error-banner");
+      const errList = document.getElementById("matrix-error-list");
+      if (errBanner && errList) {
+        if (validation.globalErrors.length > 0) {
+          errBanner.style.display = "block";
+          errList.innerHTML = validation.globalErrors.map(e => `<li>${e}</li>`).join("");
+        } else {
+          errBanner.style.display = "none";
+          errList.innerHTML = "";
+        }
+      }
+
+      const years = [
+        { key: "prev", label: "前籍校等", sub: "修得単位" },
+        { key: "y1", label: "1年目", sub: "次年度等" },
+        { key: "y2", label: "2年目", sub: "次々年度" },
+        { key: "y3", label: "3年目", sub: "卒年等" }
+      ];
+
+      if (appState.showYear4 || appState.profile.planYears === "4") {
+        years.push({ key: "y4", label: "4年目", sub: "最終年" });
+      }
+
+      let html = "";
+      let runningCumulative = 0;
+
+      years.forEach(yr => {
+        const rowSubjectIds = appState.matrix[yr.key] || [];
+        const rowCredits = calculateCreditsForList(rowSubjectIds);
+        runningCumulative += rowCredits;
+
+        const isOverLimit = yr.key !== "prev" && rowCredits > 33;
+        const isSpecialLimit = yr.key !== "prev" && rowCredits > 33 && rowCredits <= 35;
+
+        html += `<tr>
+          <td class="row-year-label">
+            <div><strong>${yr.label}</strong></div>
+            <div style="font-size: 0.65rem; color: var(--on-surface-variant);">${yr.sub}</div>
+          </td>`;
+
+        CATEGORIES.forEach(cat => {
+          const catSubjectIds = rowSubjectIds.filter(id => {
+            const s = getSubjectById(id);
+            return s && s.category === cat;
+          });
+
+          html += `<td>
+            <div class="subj-cell">
+              <div class="subj-cell-items" id="cell-${yr.key}-${cat}">`;
+
+          catSubjectIds.forEach(id => {
+            const s = getSubjectById(id);
+            if (!s) return;
+            const itemIssues = validation.issuesByCellItem[`${yr.key}_${s.id}`] || [];
+            const hasErr = itemIssues.length > 0;
+            const reqClass = s.required ? "is-required" : "";
+            const warnClass = (!hasErr && s.note) ? "has-warning" : "";
+            const errClass = hasErr ? "has-error" : "";
+            const tooltip = hasErr ? itemIssues.join(" / ") : `${s.name} (${s.credits}単位 / ${s.level}) ${s.note || ''}`;
+
+            html += `
+              <div class="subj-pill ${reqClass} ${warnClass} ${errClass}" title="${tooltip}">
+                <span class="pill-title">${s.name}</span>
+                ${hasErr ? `<span class="pill-error-tag">! エラー</span>` : ''}
+                <span class="pill-meta">[${s.credits}]</span>
+                <button class="pill-btn-del" onclick="removeSubject('${yr.key}', '${s.id}')" title="削除">×</button>
+              </div>`;
+          });
+
+          html += `</div>
+              <button class="btn-add-subject" onclick="openSubjectModal('${yr.key}', '${cat}')">
+                + 追加
+              </button>
+            </div>
+          </td>`;
+        });
+
+        const subtotalClass = isOverLimit ? "color: var(--error);" : (isSpecialLimit ? "color: var(--warning);" : "");
+        html += `
+          <td class="row-summary-cell" style="${subtotalClass}">
+            ${rowCredits}
+            ${isOverLimit ? '<div style="font-size:0.65rem; color:var(--error); font-weight:800;">超過</div>' : ''}
+          </td>
+          <td class="row-summary-cell">
+            ${runningCumulative}
+          </td>
+        </tr>`;
+      });
+
+      tbody.innerHTML = html;
+      updateMatrixFooters();
+      updateKPIRibbon();
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    // --- MATRIX FOOTER SUMMARY ---
+    function updateMatrixFooters() {
+      let grandTotal = 0;
+      const catTotals = {};
+      CATEGORIES.forEach(c => catTotals[c] = 0);
+
+      const allRows = ["prev", "y1", "y2", "y3", "y4"];
+      allRows.forEach(yKey => {
+        const ids = appState.matrix[yKey] || [];
+        ids.forEach(id => {
+          const s = getSubjectById(id);
+          if (s) {
+            catTotals[s.category] = (catTotals[s.category] || 0) + s.credits;
+            grandTotal += s.credits;
+          }
+        });
+      });
+
+      const catDomMap = {
+        "国語": "tot-kokugo", "地歴公民": "tot-chireki", "数学": "tot-suugaku", "理科": "tot-rika",
+        "保健体育": "tot-hotai", "芸術": "tot-geijutsu", "外国語": "tot-gaikoku", "家庭": "tot-katei",
+        "情報": "tot-jouhou", "専門その他": "tot-senmon", "総探": "tot-sotan"
+      };
+
+      Object.keys(catDomMap).forEach(cat => {
+        const el = document.getElementById(catDomMap[cat]);
+        if (el) el.textContent = `${catTotals[cat]}単位`;
+      });
+
+      const grandEl = document.getElementById("tot-all-credits");
+      if (grandEl) grandEl.textContent = `${grandTotal} 単位 (目標: 74単位以上)`;
+    }
+
+    // --- KPI RIBBON UPDATER ---
+    function updateKPIRibbon() {
+      let grandTotal = 0;
+      let hasAnnualViolation = false;
+      let hasSpecialAnnual = false;
+
+      ["y1", "y2", "y3", "y4"].forEach(yKey => {
+        const ids = appState.matrix[yKey] || [];
+        const c = calculateCreditsForList(ids);
+        if (c > 35) hasAnnualViolation = true;
+        else if (c > 33) hasSpecialAnnual = true;
+      });
+
+      ["prev", "y1", "y2", "y3", "y4"].forEach(yKey => {
+        grandTotal += calculateCreditsForList(appState.matrix[yKey] || []);
+      });
+
+      const totalEl = document.getElementById("kpi-total-credits");
+      const creditsTile = document.getElementById("kpi-credits-tile");
+      const creditsStatus = document.getElementById("kpi-credits-status");
+      if (totalEl) totalEl.textContent = grandTotal;
+
+      if (creditsTile && creditsStatus) {
+        if (grandTotal >= 74) {
+          creditsTile.className = "kpi-tile positive";
+          creditsStatus.innerHTML = `<span style="color:var(--positive); font-weight:800;">✓ 達成 (${grandTotal}/74)</span>`;
+        } else {
+          creditsTile.className = "kpi-tile warning";
+          const def = 74 - grandTotal;
+          creditsStatus.innerHTML = `<span style="color:var(--warning); font-weight:800;">不足 ${def}単位</span>`;
+        }
+      }
+
+      const annualVal = document.getElementById("kpi-annual-val");
+      const annualTile = document.getElementById("kpi-annual-tile");
+      if (annualVal && annualTile) {
+        if (hasAnnualViolation) {
+          annualVal.textContent = "上限超過(>35)";
+          annualTile.className = "kpi-tile error";
+        } else if (hasSpecialAnnual) {
+          annualVal.textContent = "35単位特例";
+          annualTile.className = "kpi-tile warning";
+        } else {
+          annualVal.textContent = "適正 (≤33)";
+          annualTile.className = "kpi-tile positive";
+        }
+      }
+
+      const checkResults = evaluateAllRules();
+      const checksVal = document.getElementById("kpi-checks-val");
+      const checksTile = document.getElementById("kpi-checks-tile");
+      const reqVal = document.getElementById("kpi-required-val");
+      const reqTile = document.getElementById("kpi-required-tile");
+
+      if (checksVal) checksVal.textContent = `${checkResults.passCount} / ${checkResults.totalCount}`;
+      if (checksTile) {
+        checksTile.className = checkResults.passCount === checkResults.totalCount ? "kpi-tile positive" : "kpi-tile error";
+      }
+
+      if (reqVal && reqTile) {
+        if (checkResults.allRequiredMet) {
+          reqVal.textContent = "充足 (合格)";
+          reqTile.className = "kpi-tile positive";
+        } else {
+          reqVal.textContent = "未充足";
+          reqTile.className = "kpi-tile warning";
+        }
+      }
+    }
+
+    // --- EVALUATE ALL RULES (GUIDEBOOK P.17 項目1〜14 + 分割科目・重複検証準拠) ---
+    function evaluateAllRules() {
+      const allSubjects = getAllSelectedSubjects();
+      const allIds = allSubjects.map(s => s.id);
+      const isJ = appState.profile.department === "J";
+      const planYears = parseInt(appState.profile.planYears, 10);
+      const validation = getSubjectValidationIssues();
+
+      // Check 0: 重複登録・受講順序・条件のリアルタイム検証
+      const check0Pass = validation.globalErrors.length === 0;
+
+      // Check 1: 在籍年月・卒業予定年月
+      const check1Pass = appState.profile.enrollYears.trim().length > 0 && appState.profile.gradYear.trim().length > 0;
+
+      // Check 2: 作成方針記入
+      const check2Pass = appState.profile.futureGoal.trim().length > 0;
+
+      // Check 3: 必履修科目の充足
+      const reqMissing = [];
+      const hasGenkoku = allIds.includes("kokugo_genkoku_ki") || allIds.includes("kokugo_genkoku_hyo");
+      const hasGenbun = allIds.includes("kokugo_genbun_ki") || allIds.includes("kokugo_genbun_hyo");
+      if (!hasGenkoku) reqMissing.push("現代の国語");
+      if (!hasGenbun) reqMissing.push("言語文化");
+
+      if (!allIds.includes("chireki_chiri_sogo")) reqMissing.push("地理総合");
+      if (!allIds.includes("chireki_rekishi_sogo")) reqMissing.push("歴史総合");
+      const hasKoukyou = allIds.includes("chireki_koukyou_ki") || allIds.includes("chireki_koukyou_hyo");
+      if (!hasKoukyou) reqMissing.push("公共");
+
+      const hasSuu1_1 = allIds.includes("suugaku_1_ki_1") || allIds.includes("suugaku_1_hyo_1");
+      const hasSuu1_2 = allIds.includes("suugaku_1_ki_2") || allIds.includes("suugaku_1_hyo_2");
+      if (!hasSuu1_1 || !hasSuu1_2) reqMissing.push("数学Ⅰ(①及び②)");
+
+      const rikaKisoCount = [
+        allIds.includes("rika_butsuri_ki") || allIds.includes("rika_butsuri_hyo"),
+        allIds.includes("rika_kagaku_ki") || allIds.includes("rika_kagaku_hyo"),
+        allIds.includes("rika_seibutsu_ki") || allIds.includes("rika_seibutsu_hyo"),
+        allIds.includes("rika_chigaku_ki") || allIds.includes("rika_chigaku_hyo")
+      ].filter(Boolean).length;
+
+      const hasKagakuNingen = allIds.includes("rika_kagaku_ningen");
+      let rikaPass = !isJ ? (rikaKisoCount >= 3) : ((hasKagakuNingen && rikaKisoCount >= 1) || (rikaKisoCount >= 3));
+      if (!rikaPass) reqMissing.push(isJ ? "理科(科学と人間生活+基礎1または基礎3科目)" : "理科(基礎3科目)");
+
+      let taiikuCredits = 0;
+      allSubjects.filter(s => s.category === "保健体育" && s.id !== "hotai_sports_2" && !s.id.startsWith("hotai_hoken")).forEach(s => taiikuCredits += s.credits);
+      const hasHoken = allIds.includes("hotai_hoken_a") && allIds.includes("hotai_hoken_b");
+      if (taiikuCredits < 7) reqMissing.push(`体育(7〜8単位/現在${taiikuCredits}単位)`);
+      if (!hasHoken) reqMissing.push("保健(a及びb)");
+
+      const hasArt1 = allIds.includes("geijutsu_ongaku_1") || allIds.includes("geijutsu_bijutsu_1") || allIds.includes("geijutsu_kougei_1") || allIds.includes("geijutsu_shodou_1");
+      if (!hasArt1) reqMissing.push("芸術Ⅰ(音楽/美術/工芸/書道)");
+
+      const hasEiko1_1 = allIds.includes("gaikoku_eiko_1_ki_1") || allIds.includes("gaikoku_eiko_1_hyo_1") || allIds.includes("gaikoku_eiko_1_hatsu_1");
+      const hasEiko1_2 = allIds.includes("gaikoku_eiko_1_ki_2") || allIds.includes("gaikoku_eiko_1_hyo_2") || allIds.includes("gaikoku_eiko_1_hatsu_2");
+      if (!hasEiko1_1 || !hasEiko1_2) reqMissing.push("英語コミュニケーションⅠ(①及び②)");
+
+      const hasKatei = allIds.includes("katei_kiso") || allIds.includes("katei_sogo");
+      if (!hasKatei) reqMissing.push("家庭基礎または家庭総合");
+
+      const hasJouhou1 = allIds.includes("jouhou_1_1") && allIds.includes("jouhou_1_2");
+      if (!hasJouhou1) reqMissing.push("情報Ⅰ(①及び②)");
+
+      let sotanCredits = 0;
+      allSubjects.filter(s => s.category === "総探").forEach(s => sotanCredits += s.credits);
+      if (sotanCredits < 3) reqMissing.push(`総合的な探究の時間(3単位以上/現在${sotanCredits}単位)`);
+
+      const check3Pass = reqMissing.length === 0;
+
+      // Check 7: 卒業までに74単位以上
+      let grandTotal = 0;
+      ["prev", "y1", "y2", "y3", "y4"].forEach(yKey => {
+        grandTotal += calculateCreditsForList(appState.matrix[yKey] || []);
+      });
+      const check7Pass = grandTotal >= 74;
+
+      // Check 8: 1年間の受講単位数 <= 33単位
+      let annualMax = 0;
+      let has35Special = false;
+      ["y1", "y2", "y3", "y4"].forEach(yKey => {
+        const c = calculateCreditsForList(appState.matrix[yKey] || []);
+        if (c > annualMax) annualMax = c;
+        if (c > 33 && c <= 35) has35Special = true;
+      });
+      const check8Pass = annualMax <= 33;
+      const check8Warn = annualMax > 33 && annualMax <= 35;
+
+      // Check 9: 公共・保健・家庭・情報Ⅰ①②が2年目までに履修完了しているか
+      const y12Ids = [...(appState.matrix.prev || []), ...(appState.matrix.y1 || []), ...(appState.matrix.y2 || [])];
+      const missingInY2 = [];
+      if (!(y12Ids.includes("chireki_koukyou_ki") || y12Ids.includes("chireki_koukyou_hyo"))) missingInY2.push("公共");
+      if (!(y12Ids.includes("hotai_hoken_a") && y12Ids.includes("hotai_hoken_b"))) missingInY2.push("保健");
+      if (!(y12Ids.includes("katei_kiso") || y12Ids.includes("katei_sogo"))) missingInY2.push("家庭基礎/家庭総合");
+      if (!(y12Ids.includes("jouhou_1_1") && y12Ids.includes("jouhou_1_2"))) missingInY2.push("情報Ⅰ(①②)");
+      const check9Pass = missingInY2.length === 0;
+
+      // Check 10: 4年計画生徒の3年目終了時 73単位以下
+      let y3EndTotal = calculateCreditsForList(appState.matrix.prev || []) +
+                       calculateCreditsForList(appState.matrix.y1 || []) +
+                       calculateCreditsForList(appState.matrix.y2 || []) +
+                       calculateCreditsForList(appState.matrix.y3 || []);
+      let check10Pass = true;
+      let check10Warn = false;
+      if (planYears === 4 && y3EndTotal > 73) {
+        check10Pass = false;
+        check10Warn = true;
+      }
+
+      // Check 11 & 12: 専門科目単位数（普通科は24単位以内、情報科学科は20単位以上）
+      let senmonCredits = 0;
+      allSubjects.filter(s => s.category === "専門その他").forEach(s => senmonCredits += s.credits);
+      const check11Pass = isJ || (!isJ && senmonCredits <= 24);
+      const check12Pass = !isJ || (isJ && senmonCredits >= 20);
+
+      // R9 Extra: 芸術科目の同一年度受講数は2科目以内か
+      let artYearError = false;
+      ["y1", "y2", "y3", "y4"].forEach(yKey => {
+        const artCount = (appState.matrix[yKey] || []).filter(id => {
+          const s = getSubjectById(id);
+          return s && s.category === "芸術";
+        }).length;
+        if (artCount > 2) artYearError = true;
+      });
+
+      const checks = [
+        { num: "重要", title: "科目の重複登録・受講順序（①→② / 標→発）・履修条件エラーの有無", pass: check0Pass, detail: check0Pass ? "重複や条件違反はありません。" : validation.globalErrors.join("<br>") },
+        { num: 1, title: "在籍すべき年月・卒業予定年月の記入", pass: check1Pass, detail: check1Pass ? "入力完了" : "基本プロフィールで「在籍年月」「卒業予定年月」を入力してください。" },
+        { num: 2, title: "「受講計画作成方針」の目標記載", pass: check2Pass, detail: check2Pass ? "目標が入力されています。" : "基本プロフィールで「★将来の目標」を必ず記入してください。" },
+        { num: 3, title: "必履修科目の網羅と所定単位数の充足", pass: check3Pass, detail: check3Pass ? "全教科の必履修科目が卒業計画に含まれています。" : `未配置の必履修科目: ${reqMissing.join(", ")}` },
+        { num: 4, title: "選択科目の進路・興味関心との一致", pass: allSubjects.length > 5, detail: "進路実現に向けた選択科目がバランス良く配置されています。" },
+        { num: 5, title: "卒業所定単位数（74単位以上）の達成", pass: check7Pass, detail: check7Pass ? `修得予定単位: ${grandTotal}単位 (要件充足)` : `修得予定単位: ${grandTotal}単位 (あと${74 - grandTotal}単位不足しています)` },
+        { num: 6, title: "各年度の受講単位数（33単位以下）の遵守", pass: check8Pass, warn: check8Warn, detail: check8Pass ? `年間最大登録: ${annualMax}単位 (33単位以内)` : (check8Warn ? `年間最大登録: ${annualMax}単位【35単位特例対象】担任・進路部長・教務部長の許可印が必要です。` : `年間最大登録: ${annualMax}単位【上限超過】1年間に35単位を超える登録は認められません。`) },
+        { num: 7, title: "公共・保健・家庭・情報Ⅰの2年目以内完了", pass: check9Pass, detail: check9Pass ? "2年目までに完了しています。" : `2年目までに配置されていない科目: ${missingInY2.join(", ")}` },
+        { num: 8, title: "4年計画生徒の3年目終了時単位数（73単位以内）", pass: check10Pass, warn: check10Warn, detail: planYears === 4 ? (check10Pass ? `3年目終了時累計: ${y3EndTotal}単位 (73単位以内)` : `3年目終了時累計: ${y3EndTotal}単位【特例措置要】担任およびガイダンス課長の印が必要です。`) : "3年計画のため対象外（正常）" },
+        { num: 9, title: "普通科生徒の情報科学科専門科目上限（24単位以内）", pass: check11Pass, detail: !isJ ? `専門科目受講単位: ${senmonCredits} / 上限24単位` : "情報科学科生のため対象外" },
+        { num: 10, title: "情報科学科生徒の専門科目所定単位（20単位以上）", pass: check12Pass, detail: isJ ? `専門科目受講単位: ${senmonCredits} / 基準20単位以上` : "普通科生のため対象外" },
+        { num: "R9", title: "【R9改定】芸術科目の年間受講数・受講条件チェック", pass: !artYearError, detail: !artYearError ? "各年度2科目以内で受講されています。" : "【注意】同一年度に3講座以上の芸術科目を受講する場合は担任・教科主任の裏書きが必要です。" }
+      ];
+
+      const passCount = checks.filter(c => c.pass).length;
+      return {
+        checks: checks,
+        passCount: passCount,
+        totalCount: checks.length,
+        allRequiredMet: check3Pass
+      };
+    }
+
+    // --- RENDER CHECKER TAB ---
+    function runRuleChecks() {
+      const container = document.getElementById("check-list-container");
+      if (!container) return;
+
+      const evalData = evaluateAllRules();
+      let html = "";
+
+      evalData.checks.forEach(c => {
+        let statusClass = c.pass ? "pass" : "fail";
+        let statusBadge = c.pass ? "合格" : "要修正";
+        if (c.warn) {
+          statusClass = "warn";
+          statusBadge = "要確認・特例";
+        }
+
+        html += `
+          <div class="check-card ${statusClass}">
+            <div class="check-header">
+              <h3 class="check-title">
+                <span class="tab-step-badge" style="background: var(--primary); color: #fff; font-size:0.65rem;">${c.num}</span>
+                ${c.title}
+              </h3>
+              <span class="check-badge ${statusClass}">${statusBadge}</span>
+            </div>
+            <div class="check-body">
+              ${c.detail}
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    // --- CHECK IF SUBJECT CAN BE ADDED WITHOUT CONFLICT ---
+    function checkSubjectConflictForAdd(yearKey, subj) {
+      const order = ["prev", "y1", "y2", "y3", "y4"];
+      const targetIdx = order.indexOf(yearKey);
+      const targetGroup = subj.groupId || subj.id;
+
+      // 1. 他年度（または同年度）に同一科目または同系統科目があるか
+      for (const yKey of order) {
+        const ids = appState.matrix[yKey] || [];
+        for (const existingId of ids) {
+          const ex = getSubjectById(existingId);
+          if (!ex) continue;
+          const exGroup = ex.groupId || ex.id;
+          if (ex.id === subj.id) {
+            return `既に${YEAR_LABELS[yKey]}に登録済です`;
+          }
+          if (exGroup === targetGroup) {
+            return `${YEAR_LABELS[yKey]}の「${ex.name}」と重複します`;
+          }
+        }
+      }
+
+      // 2. 前提科目・①→②・标→発・年次ルールチェック
+      const yIdxMap = {};
+      order.forEach((y, idx) => {
+        (appState.matrix[y] || []).forEach(id => { yIdxMap[id] = idx; });
+      });
+
+      const seq12Map = [
+        { p1: ["suugaku_1_ki_1", "suugaku_1_hyo_1"], p2: ["suugaku_1_ki_2", "suugaku_1_hyo_2"], msg: "「数学Ⅰ①」を先に配置してください" },
+        { p1: ["suugaku_a_1"], p2: ["suugaku_a_2"], msg: "「数学Ａ①」を先に配置してください" },
+        { p1: ["suugaku_2_ki_1", "suugaku_2_hyo_1"], p2: ["suugaku_2_ki_2", "suugaku_2_hyo_2"], msg: "「数学Ⅱ①」を先に配置してください" },
+        { p1: ["suugaku_b_1"], p2: ["suugaku_b_2"], msg: "「数学Ｂ①」を先に配置してください" },
+        { p1: ["suugaku_c_1"], p2: ["suugaku_c_2"], msg: "「数学Ｃ①」を先に配置してください" },
+        { p1: ["suugaku_3_1"], p2: ["suugaku_3_2"], msg: "「数学Ⅲ①」を先に配置してください" },
+        { p1: ["rika_butsuri_hyo"], p2: ["rika_butsuri_kiso_hatsu"], msg: "「物理基礎(標)」を先に配置してください" },
+        { p1: ["rika_kagaku_hyo"], p2: ["rika_kagaku_kiso_hatsu"], msg: "「化学基礎(標)」を先に配置してください" },
+        { p1: ["rika_seibutsu_hyo"], p2: ["rika_seibutsu_kiso_hatsu"], msg: "「生物基礎(標)」を先に配置してください" },
+        { p1: ["rika_chigaku_hyo"], p2: ["rika_chigaku_kiso_hatsu"], msg: "「地学基礎(標)」を先に配置してください" },
+        { p1: ["rika_butsuri_hatsu_1"], p2: ["rika_butsuri_hatsu_2"], msg: "「物理①(発)」を先に配置してください" },
+        { p1: ["rika_kagaku_hatsu_1"], p2: ["rika_kagaku_hatsu_2"], msg: "「化学①(発)」を先に配置してください" },
+        { p1: ["rika_seibutsu_hatsu_1"], p2: ["rika_seibutsu_hatsu_2"], msg: "「生物①(発)」を先に配置してください" },
+        { p1: ["rika_chigaku_hatsu_1"], p2: ["rika_chigaku_hatsu_2"], msg: "「地学①(発)」を先に配置してください" },
+        { p1: ["gaikoku_eiko_1_ki_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hatsu_1"], p2: ["gaikoku_eiko_1_ki_2", "gaikoku_eiko_1_hyo_2", "gaikoku_eiko_1_hatsu_2"], msg: "「英コⅠ①」を先に配置してください" },
+        { p1: ["gaikoku_eiko_2_ki_1", "gaikoku_eiko_2_hyo_1", "gaikoku_eiko_2_hatsu_1"], p2: ["gaikoku_eiko_2_ki_2", "gaikoku_eiko_2_hyo_2", "gaikoku_eiko_2_hatsu_2"], msg: "「英コⅡ①」を先に配置してください" },
+        { p1: ["jouhou_1_1"], p2: ["jouhou_1_2"], msg: "「情報Ⅰ①」を先に配置してください" },
+        { p1: ["senmon_kougyou_suuri_1"], p2: ["senmon_kougyou_suuri_2"], msg: "「工業情報数理①」を先に配置してください" },
+        { p1: ["senmon_multimedia_1"], p2: ["senmon_multimedia_2"], msg: "「実習(マルチメディア)①」を先に配置してください" }
+      ];
+
+      for (const item of seq12Map) {
+        if (item.p2.includes(subj.id)) {
+          const idx1 = Math.min(...item.p1.map(id => yIdxMap[id] ?? 99));
+          if (idx1 === 99 || targetIdx < idx1) return item.msg;
+        }
+      }
+
+      if (["suugaku_2_ki_1", "suugaku_2_ki_2", "suugaku_2_hyo_1", "suugaku_2_hyo_2"].includes(subj.id)) {
+        const s1 = Math.max(yIdxMap["suugaku_1_ki_2"] ?? -1, yIdxMap["suugaku_1_hyo_2"] ?? -1);
+        if (s1 === -1 || targetIdx <= s1) return "「数学Ⅰ②」を先に修得してください";
+      }
+      if (["suugaku_2_hyo_1", "suugaku_2_hyo_2"].includes(subj.id) && (yIdxMap["suugaku_1_ki_1"] !== undefined || yIdxMap["suugaku_1_ki_2"] !== undefined)) {
+        return "「数学Ⅰ(基)」選択者は受講不可";
+      }
+      if (["suugaku_3_1", "suugaku_3_2"].includes(subj.id)) {
+        const s2 = yIdxMap["suugaku_2_hyo_2"] ?? -1;
+        if (s2 === -1 || targetIdx <= s2) return "「数学Ⅱ(標)②」を先に修得してください";
+      }
+      if (["gaikoku_eiko_2_ki_1", "gaikoku_eiko_2_hyo_1", "gaikoku_eiko_2_hatsu_1"].includes(subj.id)) {
+        const e1 = Math.max(yIdxMap["gaikoku_eiko_1_ki_2"] ?? -1, yIdxMap["gaikoku_eiko_1_hyo_2"] ?? -1, yIdxMap["gaikoku_eiko_1_hatsu_2"] ?? -1);
+        if (e1 === -1 || targetIdx <= e1) return "「英コⅠ②」を先に修得してください";
+      }
+      if (["gaikoku_eiko_3_hatsu", "gaikoku_eiko_3_ou"].includes(subj.id)) {
+        const e2 = Math.max(yIdxMap["gaikoku_eiko_2_ki_2"] ?? -1, yIdxMap["gaikoku_eiko_2_hyo_2"] ?? -1, yIdxMap["gaikoku_eiko_2_hatsu_2"] ?? -1);
+        if (e2 === -1 || targetIdx <= e2) return "「英コⅡ②」を先に修得してください";
+      }
+      if (["chireki_koukyou_ki", "chireki_koukyou_hyo", "hotai_hoken_a", "hotai_hoken_b", "katei_kiso", "katei_sogo", "jouhou_1_1", "jouhou_1_2"].includes(subj.id) && targetIdx >= 3) {
+        return "2年目までに配置する必要があります";
+      }
+      if (subj.id === "jouhou_2") {
+        const j1 = yIdxMap["jouhou_1_2"] ?? -1;
+        if (j1 === -1 || targetIdx <= j1) return "「情報Ⅰ②」を先に修得してください";
+      }
+
+      return null;
+    }
+
+    // --- SUBJECT PICKER MODAL ---
+    function openSubjectModal(yearKey, category) {
+      activeModalCell = { yearKey, category };
+      const modal = document.getElementById("subject-modal");
+      const titleSpan = document.querySelector("#modal-title-text span");
+      const filterSelect = document.getElementById("modal-subj-filter");
+
+      if (titleSpan) {
+        const yrLabel = YEAR_LABELS[yearKey] || yearKey;
+        titleSpan.textContent = `【${yrLabel}】${category}の科目を選択`;
+      }
+      if (filterSelect) {
+        filterSelect.value = category;
+      }
+
+      renderSubjectCatalog();
+      if (modal) modal.classList.add("open");
+    }
+
+    function closeSubjectModal() {
+      const modal = document.getElementById("subject-modal");
+      if (modal) modal.classList.remove("open");
+    }
+
+    function renderSubjectCatalog() {
+      const grid = document.getElementById("modal-catalog-grid");
+      if (!grid) return;
+
+      const catFilter = document.getElementById("modal-subj-filter").value;
+      const reqFilter = document.getElementById("modal-req-filter").value;
+      const searchTxt = document.getElementById("modal-search-input").value.trim().toLowerCase();
+
+      const existingInCell = appState.matrix[activeModalCell.yearKey] || [];
+
+      const filtered = SUBJECT_CATALOG.filter(s => {
+        if (catFilter !== "all" && s.category !== catFilter) return false;
+        if (reqFilter === "required" && !s.required) return false;
+        if (reqFilter === "standard" && s.level !== "標準") return false;
+        if (reqFilter === "advanced" && s.level !== "発展" && s.level !== "応用") return false;
+        if (searchTxt && !s.name.toLowerCase().includes(searchTxt) && !(s.note && s.note.toLowerCase().includes(searchTxt))) return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div style="grid-column: 1/-1; padding: var(--space-md); text-align: center; color: var(--on-surface-variant);">条件に一致する科目がありません。</div>`;
+        return;
+      }
+
+      let html = "";
+      filtered.forEach(s => {
+        const isAddedHere = existingInCell.includes(s.id);
+        const conflictMsg = !isAddedHere ? checkSubjectConflictForAdd(activeModalCell.yearKey, s) : null;
+
+        html += `
+          <div class="catalog-item-card ${isAddedHere ? 'is-added' : (conflictMsg ? 'is-conflict' : '')}">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
+                <span style="font-size:0.68rem; font-weight:800; color:var(--primary);">${s.category}</span>
+                <span class="pill-badge" style="font-size:0.65rem;">${s.level} / ${s.term}</span>
+              </div>
+              <strong style="font-size:0.85rem; display:block; margin-bottom:2px;">${s.name}</strong>
+              <div style="font-size:0.75rem; color:var(--on-surface-variant);">単位数: <strong>${s.credits}単位</strong> ${s.required ? '<span style="color:var(--primary); font-weight:800;">[必履修]</span>' : ''}</div>
+              ${s.note ? `<div style="font-size:0.68rem; color:var(--warning); margin-top:2px; font-weight:700;">※${s.note}</div>` : ''}
+              ${conflictMsg ? `<div style="font-size:0.7rem; color:var(--error); margin-top:4px; font-weight:800; background:#ffe5e5; padding:2px 4px;">⚠ ${conflictMsg}</div>` : ''}
+            </div>
+            <div>
+              ${isAddedHere ? `
+                <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="removeSubject('${activeModalCell.yearKey}', '${s.id}'); renderSubjectCatalog();">
+                  追加済 (外す)
+                </button>
+              ` : (conflictMsg ? `
+                <button class="btn btn-danger btn-sm" style="width:100%;" onclick="addSubject('${activeModalCell.yearKey}', '${s.id}', true); renderSubjectCatalog();" title="エラー警告付きで強制追加">
+                  ⚠ 警告を確認して追加
+                </button>
+              ` : `
+                <button class="btn btn-sm" style="width:100%;" onclick="addSubject('${activeModalCell.yearKey}', '${s.id}', false); renderSubjectCatalog();">
+                  + 追加する
+                </button>
+              `)}
+            </div>
+          </div>
+        `;
+      });
+
+      grid.innerHTML = html;
+    }
+
+    // --- ADD / REMOVE SUBJECTS ---
+    function addSubject(yearKey, subjectId, hasConflict = false) {
+      if (!appState.matrix[yearKey]) appState.matrix[yearKey] = [];
+      if (!appState.matrix[yearKey].includes(subjectId)) {
+        appState.matrix[yearKey].push(subjectId);
+        renderMatrixTable();
+        persistState();
+        if (hasConflict) {
+          showToast("⚠ ルール違反・重複のエラーがあります。マトリクスの赤字を確認してください。", true);
+        } else {
+          showToast("科目を追加しました（自動保存済）", false);
+        }
+      }
+    }
+
+    function removeSubject(yearKey, subjectId) {
+      if (!appState.matrix[yearKey]) return;
+      appState.matrix[yearKey] = appState.matrix[yearKey].filter(id => id !== subjectId);
+      renderMatrixTable();
+      persistState();
+      showToast("科目を削除しました（自動保存済）", false);
+    }
+
+    // --- TOGGLE YEAR 4 ROW ---
+    function toggleYear4() {
+      appState.showYear4 = !appState.showYear4;
+      const btnText = document.getElementById("btn-toggle-y4-text");
+      if (btnText) {
+        btnText.textContent = appState.showYear4 ? "4年計画行を非表示" : "4年計画行を表示";
+      }
+      renderMatrixTable();
+      persistState();
+    }
+
+    // --- MODEL PRESET LOADING ---
+    function loadSelectedModel() {
+      const select = document.getElementById("model-pattern-select");
+      const key = select.value;
+      if (!key || !MODEL_PRESETS[key]) {
+        showToast("適用するモデルパターンを選択してください", true);
+        return;
+      }
+
+      const preset = MODEL_PRESETS[key];
+      appState.matrix = JSON.parse(JSON.stringify(preset.matrix));
+      if (preset.profile) {
+        Object.keys(preset.profile).forEach(k => {
+          appState.profile[k] = preset.profile[k];
+        });
+      }
+      if (preset.profile.planYears === "4") {
+        appState.showYear4 = true;
+      }
+
+      populateProfileForm();
+      renderMatrixTable();
+      persistState();
+      showToast(`「${preset.name}」を展開しました`, false);
+    }
+
+    // --- SAVE / LOAD PLAN FILE (JSON) FOR CONTINUOUS EDITING ---
+    function exportPlanJSON() {
+      const exportPayload = {
+        appVersion: "HakataSeisho_R9_Simulator_v2",
+        savedAt: new Date().toISOString(),
+        data: appState
+      };
+      const jsonStr = JSON.stringify(exportPayload, null, 2);
+      const pName = appState.profile.studentName || "未記入";
+      const dateStr = new Date().toISOString().slice(0, 10);
+      const filename = `受講計画保存データ_${pName}_${dateStr}.json`;
+
+      if (window.notebookAppApi && window.notebookAppApi.triggerFileDownload) {
+        window.notebookAppApi.triggerFileDownload({
+          content: jsonStr,
+          contentType: "application/json",
+          encoding: "UTF-8",
+          filename: filename
+        });
+      } else {
+        const blob = new Blob([jsonStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      showToast(`「${filename}」を保存しました。次回「続きから読込」で編集を再開できます。`, false);
+    }
+
+    function triggerLoadPlanFile() {
+      const input = document.getElementById("load-plan-file-input");
+      if (input) {
+        input.value = "";
+        input.click();
+      }
+    }
+
+    function handleLoadPlanFile(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          const loadedState = parsed.data ? parsed.data : parsed;
+          if (!loadedState || !loadedState.matrix || !loadedState.profile) {
+            throw new Error("無効な受講計画ファイル形式です。");
+          }
+
+          appState = loadedState;
+          populateProfileForm();
+          renderMatrixTable();
+          runRuleChecks();
+          updatePrintPreview();
+          persistState();
+
+          const savedTime = parsed.savedAt ? new Date(parsed.savedAt).toLocaleString("ja-JP") : "";
+          showToast(`保存データを読み込みました${savedTime ? '（保存日時: ' + savedTime + '）' : ''}。続きから編集できます。`, false);
+        } catch (err) {
+          console.error(err);
+          showToast("ファイルの読み込みに失敗しました。正しい受講計画JSONファイルを選択してください。", true);
+        }
+      };
+      reader.readAsText(file, "UTF-8");
+    }
+
+    // --- FORM DATA BINDING ---
+    function populateProfileForm() {
+      const p = appState.profile;
+      setValue("inp-student-name", p.studentName);
+      setValue("inp-hr-number", p.hrNumber);
+      setValue("sel-department", p.department);
+      setValue("sel-school-part", p.schoolPart);
+      setValue("sel-plan-years", p.planYears);
+      setValue("sel-student-type", p.studentType);
+      setValue("inp-enroll-years", p.enrollYears);
+      setValue("inp-grad-year", p.gradYear);
+      setValue("tx-future-goal", p.futureGoal);
+      setValue("sel-career-type", p.careerType);
+      setValue("inp-target-school", p.targetSchool);
+      setValue("inp-exam-type", p.examType);
+      setValue("tx-exam-subjects", p.examSubjects);
+      setValue("tx-choice-reason", p.choiceReason);
+      setValue("tx-career-notes", p.careerNotes);
+    }
+
+    function saveUserData() {
+      const p = appState.profile;
+      p.studentName = getValue("inp-student-name");
+      p.hrNumber = getValue("inp-hr-number");
+      p.department = getValue("sel-department");
+      p.schoolPart = getValue("sel-school-part");
+      p.planYears = getValue("sel-plan-years");
+      p.studentType = getValue("sel-student-type");
+      p.enrollYears = getValue("inp-enroll-years");
+      p.gradYear = getValue("inp-grad-year");
+      p.futureGoal = getValue("tx-future-goal");
+      p.careerType = getValue("sel-career-type");
+      p.targetSchool = getValue("inp-target-school");
+      p.examType = getValue("inp-exam-type");
+      p.examSubjects = getValue("tx-exam-subjects");
+      p.choiceReason = getValue("tx-choice-reason");
+      p.careerNotes = getValue("tx-career-notes");
+
+      persistState();
+      updateKPIRibbon();
+    }
+
+    function handleDepartmentChange(val) {
+      appState.profile.department = val;
+      saveUserData();
+      renderMatrixTable();
+    }
+
+    function handlePlanYearsChange(val) {
+      appState.profile.planYears = val;
+      if (val === "4") appState.showYear4 = true;
+      saveUserData();
+      renderMatrixTable();
+    }
+
+    function getValue(id) {
+      const el = document.getElementById(id);
+      return el ? el.value : "";
+    }
+
+    function setValue(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.value = val || "";
+    }
+
+    // --- RESET HANDLER ---
+    function confirmResetPlan(btn) {
+      if (btn.dataset.armed !== "true") {
+        btn.dataset.armed = "true";
+        btn.textContent = "本当にクリアしますか？";
+        btn.className = "btn btn-warning btn-sm";
+        setTimeout(() => {
+          btn.dataset.armed = "false";
+          btn.innerHTML = `<i data-lucide="trash-2" style="width:14px;height:14px;"></i> 全クリア`;
+          btn.className = "btn btn-secondary btn-sm";
+          if (window.lucide) window.lucide.createIcons();
+        }, 4000);
+        return;
+      }
+
+      btn.dataset.armed = "false";
+      btn.innerHTML = `<i data-lucide="trash-2" style="width:14px;height:14px;"></i> 全クリア`;
+      btn.className = "btn btn-secondary btn-sm";
+
+      appState.matrix = { prev: [], y1: [], y2: [], y3: [], y4: [] };
+      renderMatrixTable();
+      persistState();
+      showToast("受講計画をクリアしました", false);
+    }
+
+    // --- UPDATE PRINT PREVIEW ---
+    function updatePrintPreview() {
+      const p = appState.profile;
+      setText("pr-dept", p.department === "J" ? "情報科学科" : "普通科");
+      setText("pr-part", p.schoolPart);
+      setText("pr-hr", p.hrNumber || "未入力");
+      setText("pr-name", p.studentName || "氏名未記入");
+      setText("pr-years", p.planYears);
+      setText("pr-enroll", p.enrollYears || "--");
+      setText("pr-grad", p.gradYear || "--");
+      setText("pr-future-goal", p.futureGoal || "（未記入）");
+      setText("pr-target-school", p.targetSchool || "（未記入）");
+      setText("pr-exam-info", `${p.examType || ''} ${p.examSubjects ? ' / ' + p.examSubjects : ''}`);
+
+      const tbody = document.getElementById("print-matrix-tbody");
+      if (!tbody) return;
+
+      const years = [
+        { key: "prev", label: "前籍校等" },
+        { key: "y1", label: "1年目" },
+        { key: "y2", label: "2年目" },
+        { key: "y3", label: "3年目" }
+      ];
+      if (appState.showYear4 || p.planYears === "4") {
+        years.push({ key: "y4", label: "4年目" });
+      }
+
+      let html = "";
+      let grandTotal = 0;
+      const catTotals = {};
+      CATEGORIES.forEach(c => catTotals[c] = 0);
+      let runningCum = 0;
+
+      years.forEach(yr => {
+        const ids = appState.matrix[yr.key] || [];
+        const yrTotal = calculateCreditsForList(ids);
+        runningCum += yrTotal;
+        grandTotal += yrTotal;
+
+        html += `<tr>
+          <td style="text-align:center; font-weight:bold;">${yr.label}</td>`;
+
+        CATEGORIES.forEach(cat => {
+          const catSubs = ids.map(id => getSubjectById(id)).filter(s => s && s.category === cat);
+          const catCredits = catSubs.reduce((sum, s) => sum + s.credits, 0);
+          catTotals[cat] = (catTotals[cat] || 0) + catCredits;
+
+          const names = catSubs.map(s => `${s.name}(${s.credits})`).join("<br>");
+          html += `<td>${names || '<span style="color:#ccc;">-</span>'}</td>`;
+        });
+
+        html += `
+          <td style="text-align:right; font-weight:bold;">${yrTotal}</td>
+          <td style="text-align:right; font-weight:bold;">${runningCum}</td>
+        </tr>`;
+      });
+
+      tbody.innerHTML = html;
+
+      const prCatMap = {
+        "国語": "pr-tot-kokugo", "地歴公民": "pr-tot-chireki", "数学": "pr-tot-suugaku", "理科": "pr-tot-rika",
+        "保健体育": "pr-tot-hotai", "芸術": "pr-tot-geijutsu", "外国語": "pr-tot-gaikoku", "家庭": "pr-tot-katei",
+        "情報": "pr-tot-jouhou", "専門その他": "pr-tot-senmon", "総探": "pr-tot-sotan"
+      };
+      Object.keys(prCatMap).forEach(cat => {
+        setText(prCatMap[cat], `${catTotals[cat] || 0}`);
+      });
+      setText("pr-grand-total", `${grandTotal} 単位`);
+
+      const evalData = evaluateAllRules();
+      const evalStatusEl = document.getElementById("pr-eval-status");
+      if (evalStatusEl) {
+        if (evalData.passCount === evalData.totalCount && grandTotal >= 74) {
+          evalStatusEl.innerHTML = `<span style="color:var(--positive);">✓ 合格 (${grandTotal}単位)</span>`;
+        } else {
+          evalStatusEl.innerHTML = `<span style="color:var(--error);">要確認・修正あり (${grandTotal}/74単位)</span>`;
+        }
+      }
+    }
+
+    function setText(id, text) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = text;
+    }
+
+    // --- CSV EXPORT ---
+    function exportCSV() {
+      const p = appState.profile;
+      let csv = `\uFEFF博多青松高等学校 令和9年度 受講計画表\n`;
+      csv += `氏名,${p.studentName},HR番号,${p.hrNumber},学科,${p.department === 'J' ? '情報科学科' : '普通科'},部,${p.schoolPart},修業年限,${p.planYears}年計画\n`;
+      csv += `将来の目標,"${(p.futureGoal || '').replace(/"/g, '""')}"\n`;
+      csv += `進路第1志望,"${(p.targetSchool || '').replace(/"/g, '""')}",受験方式,"${(p.examType || '').replace(/"/g, '""')}"\n\n`;
+
+      csv += `年度,国語,地歴公民,数学,理科,保健体育,芸術,外国語,家庭,情報,専門その他,総探,小計\n`;
+
+      const years = ["prev", "y1", "y2", "y3"];
+      if (appState.showYear4 || p.planYears === "4") years.push("y4");
+
+      const yrLabels = { prev: "前籍校等", y1: "1年目", y2: "2年目", y3: "3年目", y4: "4年目" };
+
+      years.forEach(yr => {
+        const ids = appState.matrix[yr] || [];
+        const yrTotal = calculateCreditsForList(ids);
+        const rowCells = [yrLabels[yr]];
+
+        CATEGORIES.forEach(cat => {
+          const names = ids.map(id => getSubjectById(id)).filter(s => s && s.category === cat).map(s => `${s.name}[${s.credits}]`).join(" / ");
+          rowCells.push(`"${names.replace(/"/g, '""')}"`);
+        });
+        rowCells.push(yrTotal);
+        csv += rowCells.join(",") + "\n";
+      });
+
+      let grandTotal = 0;
+      years.forEach(yr => grandTotal += calculateCreditsForList(appState.matrix[yr] || []));
+      csv += `合計,,,,,,,,,,,,${grandTotal}単位\n`;
+
+      const filename = `博多青松_受講計画表_${p.studentName || '未記入'}.csv`;
+
+      if (window.notebookAppApi && window.notebookAppApi.triggerFileDownload) {
+        window.notebookAppApi.triggerFileDownload({
+          content: csv,
+          contentType: "text/csv",
+          encoding: "UTF-8",
+          filename: filename
+        });
+      } else {
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      showToast("CSV受講計画表を出力しました", false);
+    }
+
+    // --- HELPER CALCULATIONS ---
+    function getSubjectById(id) {
+      return SUBJECT_CATALOG.find(s => s.id === id);
+    }
+
+    function calculateCreditsForList(subjectIds) {
+      let sum = 0;
+      subjectIds.forEach(id => {
+        const s = getSubjectById(id);
+        if (s) sum += s.credits;
+      });
+      return sum;
+    }
+
+    function getAllSelectedSubjects() {
+      const list = [];
+      ["prev", "y1", "y2", "y3", "y4"].forEach(yr => {
+        const ids = appState.matrix[yr] || [];
+        ids.forEach(id => {
+          const s = getSubjectById(id);
+          if (s) list.push(s);
+        });
+      });
+      return list;
+    }
+
+    // --- TOAST MESSAGE ---
+    let toastTimer = null;
+    function showToast(msg, isError = false) {
+      const toast = document.getElementById("app-toast");
+      const text = document.getElementById("toast-text");
+      if (!toast || !text) return;
+      text.textContent = msg;
+      toast.classList.toggle("error-toast", isError);
+      toast.classList.add("show");
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, isError ? 4500 : 3500);
+    }
+
+    // --- STATE PERSISTENCE (LocalStorage + Notebook API) ---
+    async function persistState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+        const timeStr = new Date().toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" });
+        const autoTxt = document.getElementById("autosave-text");
+        if (autoTxt) autoTxt.textContent = `自動保存済 (${timeStr})`;
+      } catch (e) {
+        console.warn("localStorage save failed:", e);
+      }
+
+      if (window.notebookAppApi && window.notebookAppApi.setAppState) {
+        try {
+          await window.notebookAppApi.setAppState(appState);
+        } catch (e) {
+          console.error("State persistence error:", e);
+        }
+      }
+    }
+
+    async function loadPersistedState() {
+      if (window.notebookAppApi && window.notebookAppApi.getAppState) {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && saved.matrix) {
+            appState = saved;
+            return true;
+          }
+        } catch (e) {
+          console.warn("Could not load API state, checking localStorage:", e);
+        }
+      }
+
+      try {
+        const localSaved = localStorage.getItem(STORAGE_KEY);
+        if (localSaved) {
+          const parsed = JSON.parse(localSaved);
+          if (parsed && parsed.matrix) {
+            appState = parsed;
+            return true;
+          }
+        }
+      } catch (e) {
+        console.warn("Could not load localStorage state:", e);
+      }
+
+      return false;
+    }
+
+    // --- INITIALIZATION ---
+    window.addEventListener("DOMContentLoaded", async function() {
+      const loaded = await loadPersistedState();
+      if (!loaded) {
+        const def = MODEL_PRESETS.bunkei_kokkoritsu;
+        appState.matrix = JSON.parse(JSON.stringify(def.matrix));
+        Object.keys(def.profile).forEach(k => {
+          appState.profile[k] = def.profile[k];
+        });
+      }
+
+      populateProfileForm();
+      renderMatrixTable();
+      runRuleChecks();
+
+      if (window.notebookAppApi && window.notebookAppApi.notifyAppReady) {
+        window.notebookAppApi.notifyAppReady();
+      }
+
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    });
+  </script>
+</body>
+</html>
