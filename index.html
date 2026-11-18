@@ -1008,7 +1008,7 @@
             <i data-lucide="wand-2" style="width:14px;height:14px;vertical-align:middle;"></i>
             モデルパターン一括読込:
           </label>
-          <select id="model-pattern-select" class="form-control" style="width: auto; padding: 4px 8px; font-size: 0.82rem;">
+          <select id="model-pattern-select" class="form-control" style="width: auto; padding: 4px 8px; font-size: 0.82rem;" onchange="if(this.value) loadSelectedModel()">
             <option value="">-- ガイドブック掲載モデルを選択 --</option>
           <optgroup label="普通科（F）">
   <option value="bunkei_kokkoritsu">普通科 国公立文系（3年計画 / 78単位）</option>
@@ -1768,9 +1768,12 @@ const STORAGE_KEY = "hakata_seisho_r9_plan_v5";
         },
         matrix: {
           prev: [],
-          y1: ["kokugo_genkoku_hyo", "kokugo_genbun_hyo", "chireki_chiri_sogo", "chireki_koukyou_hyo", "suugaku_1_hyo_1", "suugaku_1_hyo_2", "suugaku_a_1", "suugaku_a_2", "rika_butsuri_ki", "rika_kagaku_ki", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "geijutsu_ongaku_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hyo_2", "katei_kiso", "jouhou_1_1", "jouhou_1_2", "sotan_1"],
-          y2: ["kokugo_ronri_hyo", "kokugo_koten_hyo", "chireki_rekishi_sogo", "chireki_nihonshi_hyo", "suugaku_2_hyo_1", "suugaku_2_hyo_2", "rika_seibutsu_ki", "hotai_taiiku_b", "geijutsu_ongaku_2", "gaikoku_eiko_2_hyo_1", "gaikoku_eiko_2_hyo_2", "gaikoku_ronhyo_1", "sotan_2"],
-          y3: ["kokugo_bungaku_hyo", "chireki_chiri_a", "chireki_chiri_b", "chireki_seikei_hyo", "chireki_rinri_hyo", "suugaku_b_1", "suugaku_b_2", "suugaku_c_1", "suugaku_c_2", "rika_chigaku_ki", "hotai_taiiku_c", "gaikoku_eiko_3_hatsu", "gaikoku_ronhyo_2_hatsu", "sotan_3"],
+          // 1年次: 28単位
+          y1: ["kokugo_genkoku_hyo", "kokugo_genbun_hyo", "chireki_chiri_sogo", "chireki_koukyou_ki", "suugaku_1_hyo_1", "suugaku_1_hyo_2", "suugaku_a_1", "suugaku_a_2", "rika_butsuri_ki", "rika_kagaku_ki", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "geijutsu_ongaku_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hyo_2", "katei_kiso", "jouhou_1_1", "jouhou_1_2", "sotan_1"],
+          // 2年次: 25単位
+          y2: ["kokugo_ronri_hyo_a", "kokugo_ronri_hyo_b", "kokugo_koten_hyo_1", "kokugo_koten_hyo_2", "chireki_rekishi_sogo", "chireki_nihonshi_hyo_a", "chireki_nihonshi_hyo_b", "suugaku_2_hyo_1", "suugaku_2_hyo_2", "rika_seibutsu_ki", "hotai_taiiku_b", "geijutsu_ongaku_2", "gaikoku_eiko_2_hyo_a", "gaikoku_eiko_2_hyo_b", "gaikoku_ronhyo_1_a", "gaikoku_ronhyo_1_b", "sotan_2"],
+          // 3年次: 25単位 (合計78単位)
+          y3: ["kokugo_bungaku_hyo_a", "kokugo_bungaku_hyo_b", "chireki_chiri_hyo_a", "chireki_chiri_hyo_b", "chireki_seikei_hyo", "chireki_rinri_hyo", "suugaku_b_1", "suugaku_b_2", "suugaku_c_1", "suugaku_c_2", "rika_chigaku_ki", "hotai_taiiku_c", "gaikoku_eiko_3_hatsu_a", "gaikoku_eiko_3_hatsu_b", "gaikoku_ronhyo_2_hatsu_a", "gaikoku_ronhyo_2_hatsu_b", "sotan_3"],
           y4: []
         }
       },
@@ -1787,9 +1790,12 @@ const STORAGE_KEY = "hakata_seisho_r9_plan_v5";
         },
         matrix: {
           prev: [],
-          y1: ["kokugo_genkoku_hyo", "kokugo_genbun_hyo", "chireki_chiri_sogo", "chireki_rekishi_sogo", "chireki_koukyou_hyo", "suugaku_1_ki_1", "suugaku_1_ki_2", "rika_seibutsu_ki", "rika_kagaku_ki", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hyo_2", "katei_kiso", "jouhou_1_1", "jouhou_1_2", "sotan_1"],
-          y2: ["kokugo_ronri_hyo", "kokugo_bungaku_hyo", "kokugo_koten_hyo", "chireki_nihonshi_a", "chireki_nihonshi_b", "rika_chigaku_ki", "hotai_taiiku_b", "geijutsu_bijutsu_1", "gaikoku_eiko_2_hyo_1", "gaikoku_eiko_2_hyo_2", "gaikoku_ronhyo_1", "gaikoku_speaking_hyo", "sotan_2"],
-          y3: ["kokugo_hyogen_hatsu", "kokugo_hyogen_ou", "chireki_nihonshi_hyo", "chireki_seikei_hyo", "hotai_taiiku_c", "geijutsu_bijutsu_2", "gaikoku_eiko_3_hatsu", "gaikoku_ronhyo_2_hatsu", "katei_food", "sotan_3"],
+          // 1年次: 26単位
+          y1: ["kokugo_genkoku_hyo", "kokugo_genbun_hyo", "chireki_chiri_sogo", "chireki_rekishi_sogo", "chireki_koukyou_ki", "suugaku_1_ki_1", "suugaku_1_ki_2", "rika_seibutsu_ki", "rika_kagaku_ki", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hyo_2", "katei_kiso", "jouhou_1_1", "jouhou_1_2", "sotan_1"],
+          // 2年次: 25単位
+          y2: ["kokugo_ronri_hyo_a", "kokugo_ronri_hyo_b", "kokugo_bungaku_hyo_a", "kokugo_bungaku_hyo_b", "kokugo_koten_hyo_1", "kokugo_koten_hyo_2", "chireki_nihonshi_hyo_a", "chireki_nihonshi_hyo_b", "rika_chigaku_ki", "hotai_taiiku_b", "geijutsu_bijutsu_1", "gaikoku_eiko_2_hyo_a", "gaikoku_eiko_2_hyo_b", "gaikoku_ronhyo_1_a", "gaikoku_ronhyo_1_b", "gaikoku_speaking_hyo_a", "gaikoku_speaking_hyo_b", "sotan_2"],
+          // 3年次: 25単位 (合計76単位)
+          y3: ["kokugo_hyogen_hatsu", "kokugo_hyogen_ou", "chireki_nihonshi_hatsu_c", "chireki_nihonshi_hatsu_d", "chireki_seikei_hyo", "hotai_taiiku_c", "geijutsu_bijutsu_2", "gaikoku_eiko_3_hatsu_a", "gaikoku_eiko_3_hatsu_b", "gaikoku_ronhyo_2_hatsu_a", "gaikoku_ronhyo_2_hatsu_b", "katei_food_std", "katei_food_adv", "sotan_3"],
           y4: []
         }
       },
@@ -1806,9 +1812,12 @@ const STORAGE_KEY = "hakata_seisho_r9_plan_v5";
         },
         matrix: {
           prev: [],
-          y1: ["kokugo_genkoku_hyo", "kokugo_genbun_hyo", "chireki_rekishi_sogo", "chireki_koukyou_hyo", "suugaku_1_hyo_1", "suugaku_1_hyo_2", "suugaku_a_1", "suugaku_a_2", "rika_butsuri_hyo", "rika_butsuri_kiso_hatsu", "rika_kagaku_hyo", "rika_kagaku_kiso_hatsu", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hyo_2", "jouhou_1_1", "jouhou_1_2", "sotan_1"],
-          y2: ["kokugo_ronri_hyo", "chireki_chiri_sogo", "suugaku_2_hyo_1", "suugaku_2_hyo_2", "suugaku_b_1", "suugaku_b_2", "suugaku_c_1", "suugaku_c_2", "rika_butsuri_hatsu_1", "rika_butsuri_hatsu_2", "rika_kagaku_hatsu_1", "rika_kagaku_hatsu_2", "hotai_taiiku_b", "geijutsu_bijutsu_1", "gaikoku_eiko_2_hyo_1", "gaikoku_eiko_2_hyo_2", "katei_kiso", "sotan_2"],
-          y3: ["chireki_chiri_a", "chireki_chiri_b", "suugaku_3_1", "suugaku_3_2", "rika_butsuri_ou", "rika_kagaku_ou", "hotai_taiiku_c", "gaikoku_eiko_3_hatsu", "gaikoku_ronhyo_1", "gaikoku_ronhyo_2_hatsu", "senmon_programming", "sotan_3"],
+          // 1年次: 28単位
+          y1: ["kokugo_genkoku_hyo", "kokugo_genbun_hyo", "chireki_rekishi_sogo", "chireki_koukyou_ki", "suugaku_1_hyo_1", "suugaku_1_hyo_2", "suugaku_a_1", "suugaku_a_2", "rika_butsuri_hyo", "rika_butsuri_kiso_hatsu", "rika_kagaku_hyo", "rika_kagaku_kiso_hatsu", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hyo_2", "jouhou_1_1", "jouhou_1_2", "sotan_1"],
+          // 2年次: 27単位
+          y2: ["kokugo_ronri_hyo_a", "kokugo_ronri_hyo_b", "chireki_chiri_sogo", "suugaku_2_hyo_1", "suugaku_2_hyo_2", "suugaku_b_1", "suugaku_b_2", "suugaku_c_1", "suugaku_c_2", "rika_butsuri_hatsu_1", "rika_butsuri_hatsu_2", "rika_kagaku_hatsu_1", "rika_kagaku_hatsu_2", "hotai_taiiku_b", "geijutsu_bijutsu_1", "gaikoku_eiko_2_hyo_a", "gaikoku_eiko_2_hyo_b", "katei_kiso", "sotan_2"],
+          // 3年次: 24単位 (合計79単位)
+          y3: ["chireki_chiri_hyo_a", "chireki_chiri_hyo_b", "suugaku_3_1", "suugaku_3_2", "rika_butsuri_ou", "rika_kagaku_ou", "hotai_taiiku_c", "gaikoku_eiko_3_hatsu_a", "gaikoku_eiko_3_hatsu_b", "gaikoku_ronhyo_1_a", "gaikoku_ronhyo_1_b", "gaikoku_ronhyo_2_hatsu_a", "gaikoku_ronhyo_2_hatsu_b", "senmon_programming_1", "sotan_3"],
           y4: []
         }
       },
@@ -1825,9 +1834,12 @@ const STORAGE_KEY = "hakata_seisho_r9_plan_v5";
         },
         matrix: {
           prev: [],
-          y1: ["kokugo_genkoku_hyo", "kokugo_genbun_hyo", "chireki_rekishi_sogo", "chireki_koukyou_hyo", "suugaku_1_hyo_1", "suugaku_1_hyo_2", "suugaku_a_1", "suugaku_a_2", "rika_kagaku_hyo", "rika_kagaku_kiso_hatsu", "rika_seibutsu_ki", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hyo_2", "katei_kiso", "jouhou_1_1", "jouhou_1_2", "sotan_1"],
-          y2: ["kokugo_ronri_hyo", "chireki_chiri_sogo", "suugaku_2_hyo_1", "suugaku_2_hyo_2", "suugaku_b_1", "suugaku_b_2", "rika_kagaku_hatsu_1", "rika_kagaku_hatsu_2", "rika_seibutsu_hyo", "rika_seibutsu_kiso_hatsu", "hotai_taiiku_b", "geijutsu_ongaku_1", "gaikoku_eiko_2_hyo_1", "gaikoku_eiko_2_hyo_2", "gaikoku_ronhyo_1", "sotan_2"],
-          y3: ["suugaku_c_1", "suugaku_c_2", "rika_kagaku_ou", "rika_seibutsu_hatsu_1", "rika_seibutsu_hatsu_2", "hotai_taiiku_c", "gaikoku_eiko_3_hatsu", "gaikoku_ronhyo_2_hatsu", "jouhou_2", "katei_food", "senmon_ai_literacy", "sotan_3"],
+          // 1年次: 26単位
+          y1: ["kokugo_genkoku_hyo", "kokugo_genbun_hyo", "chireki_rekishi_sogo", "chireki_koukyou_ki", "suugaku_1_hyo_1", "suugaku_1_hyo_2", "suugaku_a_1", "suugaku_a_2", "rika_kagaku_hyo", "rika_kagaku_kiso_hatsu", "rika_seibutsu_ki", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hyo_2", "katei_kiso", "jouhou_1_1", "jouhou_1_2", "sotan_1"],
+          // 2年次: 25単位
+          y2: ["kokugo_ronri_hyo_a", "kokugo_ronri_hyo_b", "chireki_chiri_sogo", "suugaku_2_hyo_1", "suugaku_2_hyo_2", "suugaku_b_1", "suugaku_b_2", "rika_kagaku_hatsu_1", "rika_kagaku_hatsu_2", "rika_seibutsu_hyo", "rika_seibutsu_kiso_hatsu", "hotai_taiiku_b", "geijutsu_ongaku_1", "gaikoku_eiko_2_hyo_a", "gaikoku_eiko_2_hyo_b", "gaikoku_ronhyo_1_a", "gaikoku_ronhyo_1_b", "sotan_2"],
+          // 3年次: 25単位 (合計76単位)
+          y3: ["suugaku_c_1", "suugaku_c_2", "rika_kagaku_ou", "rika_seibutsu_hatsu_1", "rika_seibutsu_hatsu_2", "hotai_taiiku_c", "gaikoku_eiko_3_hatsu_a", "gaikoku_eiko_3_hatsu_b", "gaikoku_ronhyo_2_hatsu_a", "gaikoku_ronhyo_2_hatsu_b", "katei_food_std", "katei_food_adv", "senmon_ai_literacy", "sotan_3"],
           y4: []
         }
       },
@@ -1844,9 +1856,12 @@ const STORAGE_KEY = "hakata_seisho_r9_plan_v5";
         },
         matrix: {
           prev: [],
-          y1: ["kokugo_genkoku_ki", "kokugo_genbun_ki", "chireki_koukyou_ki", "suugaku_1_ki_1", "suugaku_1_ki_2", "rika_butsuri_ki", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_ki_1", "gaikoku_eiko_1_ki_2", "katei_sogo", "jouhou_1_1", "jouhou_1_2", "sotan_1"],
-          y2: ["kokugo_ronri_ki", "kokugo_hyogen_ki", "chireki_chiri_sogo", "chireki_rekishi_sogo", "suugaku_2_ki_1", "suugaku_2_ki_2", "rika_kagaku_ki", "hotai_taiiku_b", "geijutsu_kougei_1", "gaikoku_eiko_2_ki_1", "gaikoku_eiko_2_ki_2", "katei_seikatsu", "sotan_2"],
-          y3: ["kokugo_hyogen_hatsu", "rika_seibutsu_ki", "rika_chigaku_ki", "hotai_taiiku_c", "geijutsu_kougei_2", "gaikoku_speaking_ki", "katei_food", "senmon_business_kiso", "senmon_boki", "senmon_shori_enshu", "sotan_3", "sotan_koza_zen", "sotan_koza_go"],
+          // 1年次: 25単位
+          y1: ["kokugo_genkoku_ki", "kokugo_genbun_ki", "chireki_koukyou_ki", "suugaku_1_ki_1", "suugaku_1_ki_2", "rika_butsuri_ki", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_ki_1", "gaikoku_eiko_1_ki_2", "katei_sogo_a", "katei_sogo_b", "jouhou_1_1", "jouhou_1_2", "sotan_1"],
+          // 2年次: 25単位
+          y2: ["kokugo_ronri_ki_a", "kokugo_ronri_ki_b", "kokugo_hyogen_ki_a", "kokugo_hyogen_ki_b", "chireki_chiri_sogo", "chireki_rekishi_sogo", "suugaku_2_ki_1", "suugaku_2_ki_2", "rika_kagaku_ki", "hotai_taiiku_b", "geijutsu_kougei_1", "gaikoku_eiko_2_ki_a", "gaikoku_eiko_2_ki_b", "katei_seikatsu", "sotan_2"],
+          // 3年次: 25単位 (合計75単位)
+          y3: ["kokugo_hyogen_hatsu", "rika_seibutsu_ki", "rika_chigaku_ki", "hotai_taiiku_c", "geijutsu_kougei_2", "gaikoku_speaking_ki_a", "gaikoku_speaking_ki_b", "katei_food_std", "katei_food_adv", "senmon_business_kiso", "senmon_boki_ki", "senmon_shori_enshu", "sotan_3"],
           y4: []
         }
       },
@@ -1864,18 +1879,17 @@ const STORAGE_KEY = "hakata_seisho_r9_plan_v5";
         },
         matrix: {
           prev: [],
-          // 1年次: 24単位（必履修中心＋工業情報数理①②）
-          y1: ["kokugo_genkoku_hyo", "kokugo_genbun_hyo", "chireki_koukyou_hyo", "suugaku_1_hyo_1", "suugaku_1_hyo_2", "suugaku_a_1", "suugaku_a_2", "rika_butsuri_hyo", "rika_butsuri_kiso_hatsu", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hyo_2", "senmon_kougyou_suuri_1", "senmon_kougyou_suuri_2", "sotan_1"],
-          // 2年次: 22単位（累計46単位）
-          y2: ["chireki_chiri_sogo", "suugaku_2_hyo_1", "suugaku_2_hyo_2", "suugaku_b_1", "suugaku_b_2", "rika_kagaku_hyo", "rika_kagaku_kiso_hatsu", "hotai_taiiku_b", "gaikoku_eiko_2_hyo_1", "gaikoku_eiko_2_hyo_2", "senmon_cs_a", "senmon_cs_b", "sotan_2"],
-          // 3年次: 20単位（累計66単位 ※4年計画の「3年目まで73単位以内」を遵守）
-          y3: ["kokugo_ronri_hyo", "chireki_rekishi_sogo", "suugaku_c_1", "suugaku_c_2", "hotai_taiiku_c", "geijutsu_bijutsu_1", "gaikoku_ronhyo_1", "katei_kiso", "senmon_programming_1", "senmon_programming_2", "senmon_ai_literacy", "sotan_3"],
-          // 4年次（卒年）: 22単位（合計88単位 / 専門26単位＋課題研究必修得）
-          y4: ["hotai_taiiku_d", "gaikoku_eiko_3_hatsu", "gaikoku_ronhyo_2_hatsu", "senmon_hardware_hatsu", "senmon_hardware_ou", "senmon_software_hatsu", "senmon_software_ou", "senmon_kadai_kenkyu", "sotan_4"]
+          // 1年次: 23単位
+          y1: ["kokugo_genkoku_hyo", "kokugo_genbun_hyo", "chireki_koukyou_ki", "suugaku_1_hyo_1", "suugaku_1_hyo_2", "suugaku_a_1", "suugaku_a_2", "rika_butsuri_hyo", "rika_butsuri_kiso_hatsu", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hyo_2", "senmon_kougyou_suuri_1", "senmon_kougyou_suuri_2", "sotan_1"],
+          // 2年次: 21単位
+          y2: ["chireki_chiri_sogo", "suugaku_2_hyo_1", "suugaku_2_hyo_2", "suugaku_b_1", "suugaku_b_2", "rika_kagaku_hyo", "rika_kagaku_kiso_hatsu", "hotai_taiiku_b", "gaikoku_eiko_2_hyo_a", "gaikoku_eiko_2_hyo_b", "senmon_cs_a", "senmon_cs_b", "sotan_2"],
+          // 3年次: 21単位 (3年目まで累計65単位)
+          y3: ["kokugo_ronri_hyo_a", "kokugo_ronri_hyo_b", "chireki_rekishi_sogo", "suugaku_c_1", "suugaku_c_2", "hotai_taiiku_c", "geijutsu_bijutsu_1", "gaikoku_ronhyo_1_a", "gaikoku_ronhyo_1_b", "katei_kiso", "senmon_programming_1", "senmon_programming_2", "senmon_ai_literacy", "sotan_3"],
+          // 4年次（卒年）: 23単位 (合計88単位)
+          y4: ["hotai_taiiku_d", "gaikoku_eiko_3_hatsu_a", "gaikoku_eiko_3_hatsu_b", "gaikoku_ronhyo_2_hatsu_a", "gaikoku_ronhyo_2_hatsu_b", "senmon_hardware_hatsu", "senmon_hardware_ou", "senmon_software_hatsu", "senmon_software_ou", "senmon_kadai_kenkyu", "sotan_4"]
         }
       },
-
-      // 2. 情報科学科 私立文系・特別推薦（3年計画 / 経済・経営・情報系学部向け）
+      // 2. 情報科学科 私立文系・特別推薦（3年計画 / 76単位）
       j_shiritsu_bunkei: {
         name: "情報科学科 私立文系・特別推薦進学（3年計画 / 76単位）",
         profile: {
@@ -1889,16 +1903,16 @@ const STORAGE_KEY = "hakata_seisho_r9_plan_v5";
         },
         matrix: {
           prev: [],
-          // 1年次: 26単位
-          y1: ["kokugo_genkoku_hyo", "kokugo_genbun_hyo", "chireki_koukyou_hyo", "suugaku_1_hyo_1", "suugaku_1_hyo_2", "rika_kagaku_ningen", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hyo_2", "katei_kiso", "senmon_jouhou_shori_1", "senmon_jouhou_shori_2", "sotan_1"],
-          // 2年次: 26単位（累計52単位）
-          y2: ["kokugo_ronri_hyo", "chireki_chiri_sogo", "chireki_rekishi_sogo", "suugaku_a_1", "suugaku_a_2", "rika_seibutsu_ki", "hotai_taiiku_b", "geijutsu_shodo_1", "gaikoku_eiko_2_hyo_1", "gaikoku_eiko_2_hyo_2", "gaikoku_ronhyo_1", "senmon_business_kiso", "senmon_boki_ki", "senmon_boki_hyo", "sotan_2"],
-          // 3年次: 24単位（合計76単位 / 専門26単位・課題研究含む）
-          y3: ["kokugo_hyogen_hatsu", "kokugo_hyogen_ou", "chireki_seikei_hyo", "hotai_taiiku_c", "gaikoku_ronhyo_2_hatsu", "senmon_marketing", "senmon_business_houki", "senmon_software_katsuyo", "senmon_network_katsuyo", "senmon_ai_literacy", "senmon_kadai_kenkyu", "sotan_3"]
+          // 1年次: 25単位
+          y1: ["kokugo_genkoku_hyo", "kokugo_genbun_hyo", "chireki_koukyou_ki", "suugaku_1_hyo_1", "suugaku_1_hyo_2", "rika_kagaku_ningen", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_hyo_1", "gaikoku_eiko_1_hyo_2", "katei_kiso", "senmon_joho_shori_1", "senmon_joho_shori_2", "sotan_1"],
+          // 2年次: 26単位
+          y2: ["kokugo_ronri_hyo_a", "kokugo_ronri_hyo_b", "chireki_chiri_sogo", "chireki_rekishi_sogo", "suugaku_a_1", "suugaku_a_2", "rika_seibutsu_ki", "hotai_taiiku_b", "geijutsu_shodou_1", "gaikoku_eiko_2_hyo_a", "gaikoku_eiko_2_hyo_b", "gaikoku_ronhyo_1_a", "gaikoku_ronhyo_1_b", "senmon_business_kiso", "senmon_boki_ki", "senmon_boki_hyo", "sotan_2"],
+          // 3年次: 25単位 (合計76単位)
+          y3: ["kokugo_hyogen_hatsu", "kokugo_hyogen_ou", "chireki_seikei_hyo", "hotai_taiiku_c", "gaikoku_ronhyo_2_hatsu_a", "gaikoku_ronhyo_2_hatsu_b", "senmon_marketing", "senmon_biz_houki", "senmon_software_katsuyou", "senmon_network_katsuyou", "senmon_ai_literacy", "senmon_kadai_kenkyu", "sotan_3"],
+          y4: []
         }
       },
-
-      // 3. 情報科学科 情報システム・IT就職（3年計画 / 工業情報系）
+      // 3. 情報科学科 情報システム・IT就職（3年計画 / 76単位）
       j_system: {
         name: "情報科学科 情報システム・IT就職（3年計画 / 76単位）",
         profile: {
@@ -1912,16 +1926,16 @@ const STORAGE_KEY = "hakata_seisho_r9_plan_v5";
         },
         matrix: {
           prev: [],
-          // 1年次: 26単位
+          // 1年次: 25単位
           y1: ["kokugo_genkoku_ki", "kokugo_genbun_ki", "chireki_koukyou_ki", "suugaku_1_ki_1", "suugaku_1_ki_2", "rika_kagaku_ningen", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_ki_1", "gaikoku_eiko_1_ki_2", "katei_kiso", "senmon_kougyou_suuri_1", "senmon_kougyou_suuri_2", "senmon_business_kiso", "sotan_1"],
-          // 2年次: 26単位（累計52単位）
-          y2: ["kokugo_ronri_ki", "chireki_chiri_sogo", "chireki_rekishi_sogo", "suugaku_2_ki_1", "suugaku_2_ki_2", "rika_butsuri_ki", "hotai_taiiku_b", "geijutsu_kougei_1", "gaikoku_eiko_2_ki_1", "gaikoku_eiko_2_ki_2", "senmon_cs_a", "senmon_cs_b", "senmon_ai_literacy", "sotan_2"],
-          // 3年次: 24単位（合計76単位 / 専門28単位・課題研究含む）
-          y3: ["kokugo_hyogen_hatsu", "hotai_taiiku_c", "senmon_programming_1", "senmon_programming_2", "senmon_hardware_hatsu", "senmon_hardware_ou", "senmon_software_hatsu", "senmon_software_ou", "senmon_network_katsuyo", "senmon_kadai_kenkyu", "sotan_3"]
+          // 2年次: 26単位
+          y2: ["kokugo_ronri_ki_a", "kokugo_ronri_ki_b", "chireki_chiri_sogo", "chireki_rekishi_sogo", "suugaku_2_ki_1", "suugaku_2_ki_2", "rika_butsuri_ki", "hotai_taiiku_b", "geijutsu_kougei_1", "gaikoku_eiko_2_ki_a", "gaikoku_eiko_2_ki_b", "senmon_cs_a", "senmon_cs_b", "senmon_ai_literacy", "sotan_2"],
+          // 3年次: 25単位 (合計76単位)
+          y3: ["kokugo_hyogen_hatsu", "hotai_taiiku_c", "senmon_programming_1", "senmon_programming_2", "senmon_hardware_hatsu", "senmon_hardware_ou", "senmon_software_hatsu", "senmon_software_ou", "senmon_network_katsuyou", "senmon_kadai_kenkyu", "sotan_3"],
+          y4: []
         }
       },
-
-      // 4. 情報科学科 情報デザイン・専門学校（3年計画 / Web・CG・メディア系）
+      // 4. 情報科学科 情報デザイン・専門学校（3年計画 / 76単位）
       j_design: {
         name: "情報科学科 情報デザイン・専門学校（3年計画 / 76単位）",
         profile: {
@@ -1935,16 +1949,16 @@ const STORAGE_KEY = "hakata_seisho_r9_plan_v5";
         },
         matrix: {
           prev: [],
-          // 1年次: 26単位
+          // 1年次: 25単位
           y1: ["kokugo_genkoku_ki", "kokugo_genbun_ki", "chireki_koukyou_ki", "suugaku_1_ki_1", "suugaku_1_ki_2", "rika_kagaku_ningen", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_ki_1", "gaikoku_eiko_1_ki_2", "geijutsu_bijutsu_1", "senmon_kougyou_suuri_1", "senmon_kougyou_suuri_2", "senmon_ai_literacy", "sotan_1"],
-          // 2年次: 26単位（累計52単位）
-          y2: ["kokugo_hyogen_ki", "chireki_chiri_sogo", "chireki_rekishi_sogo", "rika_seibutsu_ki", "hotai_taiiku_b", "geijutsu_bijutsu_2_1", "geijutsu_bijutsu_2_2", "gaikoku_eiko_2_ki_1", "gaikoku_eiko_2_ki_2", "katei_kiso", "senmon_cad", "senmon_design", "senmon_cs_a", "senmon_cs_b", "sotan_2"],
-          // 3年次: 24単位（合計76単位 / 専門26単位・課題研究含む）
-          y3: ["kokugo_hyogen_hatsu", "hotai_taiiku_c", "katei_color", "senmon_multimedia_1", "senmon_multimedia_2", "senmon_software_katsuyo", "senmon_shogyo_prog", "senmon_marketing", "senmon_kadai_kenkyu", "sotan_3"]
+          // 2年次: 26単位
+          y2: ["kokugo_hyogen_ki_a", "kokugo_hyogen_ki_b", "chireki_chiri_sogo", "chireki_rekishi_sogo", "rika_seibutsu_ki", "hotai_taiiku_b", "geijutsu_bijutsu_2", "gaikoku_eiko_2_ki_a", "gaikoku_eiko_2_ki_b", "katei_kiso", "senmon_cad", "senmon_design", "senmon_cs_a", "senmon_cs_b", "sotan_2"],
+          // 3年次: 25単位 (合計76単位)
+          y3: ["kokugo_hyogen_hatsu", "hotai_taiiku_c", "katei_color", "senmon_multimedia_1", "senmon_multimedia_2", "senmon_software_katsuyou", "senmon_programming_shou", "senmon_marketing", "senmon_kadai_kenkyu", "sotan_3"],
+          y4: []
         }
       },
-
-      // 5. 情報科学科 会計・ビジネス就職（3年計画 / 商業事務・販売系）
+      // 5. 情報科学科 会計・ビジネス就職（3年計画 / 76単位）
       j_kaikei_business: {
         name: "情報科学科 会計・ビジネス就職（3年計画 / 76単位）",
         profile: {
@@ -1958,15 +1972,15 @@ const STORAGE_KEY = "hakata_seisho_r9_plan_v5";
         },
         matrix: {
           prev: [],
-          // 1年次: 26単位
-          y1: ["kokugo_genkoku_ki", "kokugo_genbun_ki", "chireki_koukyou_ki", "suugaku_1_ki_1", "suugaku_1_ki_2", "rika_kagaku_ningen", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_ki_1", "gaikoku_eiko_1_ki_2", "katei_kiso", "senmon_jouhou_shori_1", "senmon_jouhou_shori_2", "senmon_business_kiso", "sotan_1"],
-          // 2年次: 26単位（累計52単位）
-          y2: ["kokugo_ronri_ki", "chireki_chiri_sogo", "chireki_rekishi_sogo", "rika_seibutsu_ki", "hotai_taiiku_b", "geijutsu_shodo_1", "gaikoku_eiko_2_ki_1", "gaikoku_eiko_2_ki_2", "katei_seikatsu", "senmon_boki_ki", "senmon_boki_hyo", "senmon_marketing", "senmon_business_houki", "sotan_2"],
-          // 3年次: 24単位（合計76単位 / 専門28単位・課題研究含む）
-          y3: ["kokugo_hyogen_hatsu", "hotai_taiiku_c", "senmon_zaimu_1", "senmon_genka", "senmon_hisho", "senmon_software_katsuyo", "senmon_kadai_kenkyu", "sotan_3"]
+          // 1年次: 25単位
+          y1: ["kokugo_genkoku_ki", "kokugo_genbun_ki", "chireki_koukyou_ki", "suugaku_1_ki_1", "suugaku_1_ki_2", "rika_kagaku_ningen", "hotai_hoken_a", "hotai_hoken_b", "hotai_taiiku_1", "gaikoku_eiko_1_ki_1", "gaikoku_eiko_1_ki_2", "katei_kiso", "senmon_joho_shori_1", "senmon_joho_shori_2", "senmon_business_kiso", "sotan_1"],
+          // 2年次: 26単位
+          y2: ["kokugo_ronri_ki_a", "kokugo_ronri_ki_b", "chireki_chiri_sogo", "chireki_rekishi_sogo", "rika_seibutsu_ki", "hotai_taiiku_b", "geijutsu_shodou_1", "gaikoku_eiko_2_ki_a", "gaikoku_eiko_2_ki_b", "katei_seikatsu", "senmon_boki_ki", "senmon_boki_hyo", "senmon_marketing", "senmon_biz_houki", "sotan_2"],
+          // 3年次: 25単位 (合計76単位)
+          y3: ["kokugo_hyogen_hatsu", "hotai_taiiku_c", "senmon_zaimu_1", "senmon_genka", "senmon_hisho", "senmon_software_katsuyou", "senmon_kadai_kenkyu", "sotan_3"],
+          y4: []
         }
-      },
-
+      }
     };
 
     // --- SUBJECT-LEVEL REAL-TIME VALIDATION ENGINE ---
